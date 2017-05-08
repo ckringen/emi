@@ -1,3 +1,4 @@
+""" Collect verb-particle pairs from Syntactic N-grams """
 #!/usr/bin/env python3
 import sys
 

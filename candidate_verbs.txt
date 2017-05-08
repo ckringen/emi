@@ -1,0 +1,179 @@
+Restricted:
+
+very negative:
+(happens when verb is common but particle rarely happens with it)
+pour up
+drop up
+sign down
+line down
+tuck out
+show out
+jot up
+stand back
+check off
+spit down
+drum out
+brush out
+wipe up
+follow down
+wave up
+
+very positive:
+(happens when verb is rare so the particle is informative)
+bandy about
+piece together
+fiddle around
+boss around
+sing along
+leave behind
+tear apart
+
+
+
+Highly restricted:
+very positive:
+scrape together
+piece together
+knit together
+bandy about
+boss around
+leave behind
+tell apart
+win over
+mull over
+gloss over
+
+
+we have VP, V, and P
+highest pmi when 
+VP == V (the verb always appears with its particle, e.g. "bandy about"),
+or VP == P (the particle only ever appears with this verb, e.g. "leave behind")
+
+The real question is, given the verb, how much are you expecting the particle?
+This should incorporate "null particles", so the VP==P high-pmi cases are dubious.
+The VP==V ones are also scary,
+because they just mean that the verb never appears with any other particle.
+
+Very positive:
+piece together
+bandy about
+boss around
+leave behind	(VP=P)
+gloss over   (gloss over the details, *gloss the details over, ?gloss it over)
+fritter away
+bowl over
+goad on
+hem in
+rein in
+cash in	(+on, cash checks)
+tamp down     (+on)
+wolf down
+jot down
+slow down	(+car)
+fob off
+wring out
+
+Very negative:
+show out
+sign out
+follow out
+pick off
+nail up
+kick up
+
+
+neutral:
+get out
+throw out
+play down
+
+
+
+What really matters isn't straight up pmi.
+It's p(particle|true context) vs. p(particle|noisy channel context at distance d).
+From that perspective, "out" in "show out" doesn't get monotonically better with distance.
+You still need some licensor of "out".
+We have p(out|show+particle) < p(out|V+particle).
+We really want p(out|show+particle) vs. p(particle+out).
+p(particle+out|V) will be extremely low. Many verbs don't ever predict a particle!
+So this pmi will just about never be negative.
+
+
+
+
+
+
+
+
+CONTROL FOR:
+Animacy
+Compositionality of particle and verb according to Lohse criteria
+Frequency?
+Which particle
+
+
+
+show X out < show out X
+bandy about Y < bandy Y about
+wolf down Y < wolf Y down
+
+boss X around
+boss around X
+
+animate object, high pmi
+boss around
+goad on
+?slow down
+egg on?
+invite over
+invite along
+
+inanimate object, high pmi
+bandy about
+fob off
+rein in
+wolf down
+slow down
+wring out
+tamp down
+eke out?
+mull over
+gloss over
+squirrel away
+
+animate object, low pmi
+sign out
+show out
+send up
+dress down
+
+inanimate object, low pmi
+?pick off
+nail up
+kick up
+set down
+work up
+sign over
+make out?
+smooth away
+knock back
+
+
+
+Look in Google Books too.
+
+Lohse's compositionality criteria:
+(10) Verb entailment test If[XVNPPt]entails[XVNP],thenassignVi.Ifnot,assignVd.
+(11) Particle entailment test If[XVNPPt]entails[NPPredVPt],thenassignPti.Ifnot,assignPtd. PredV predicationverb(BE, BECOME, COME, GO, STAY)15
+
+
+sparse distro over symbol sequences of length n
+you can choose ordering
+you can only keep b symbols in the context
+
+for every symbol there are only b elements that influence its probability -- markov blanket
+
+take lang opt view?
+some orders have a simple policy
+
+
