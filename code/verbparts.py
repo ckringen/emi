@@ -67,6 +67,6 @@ if __name__ == '__main__':
         main(*sys.argv[1:])
     except IndexError as e:
         print(e, file=sys.stderr)
-        print("Need a filename listing verb-particle combinations; ", end="")
-        print("N-gram counts come in through stdin.")
+        print("Need a filename listing verb-particle combinations; ", end="", file=sys.stderr)
+        print("N-gram counts come in through stdin.", file=sys.stderr)
         
