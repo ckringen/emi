@@ -11,38 +11,9 @@ def err(x):
     print(x, file=sys.stderr)
     sys.stderr.flush()
 
-def sliding(xs, n):
-    """ Sliding
-
-    Yield adjacent elements from an iterable in a sliding window
-    of size n.
-
-    Parameters:
-        xs: Any iterable.
-        n: Window size, an integer.
-
-    Yields:
-        Tuples of size n.
-
-    Example:
-        >>> lst = ['a', 'b', 'c', 'd', 'e']
-        >>> list(sliding(lst, 2))
-        [('a', 'b'), ('b', 'c'), ('c', 'd'), ('d', 'e')]
-
-    """
-    its = itertools.tee(xs, n)
-    for i, iterator in enumerate(its):
-        for _ in range(i):
-            next(iterator)
-    return zip(*its)
-
 def ichunks(iterable, size):
     while True:
         yield itertools.islice(iterable, size)        
-
-def skipgrams(xs, k):
-    for block in sliding(xs, 2+k):
-        yield block[0], block[-1]
 
 def tokenize(line):
     parts = line.strip().split()
@@ -81,11 +52,6 @@ def tokenize(line):
 
 flat = itertools.chain.from_iterable
 
-def skipgrams_from_lines(lines, k):
-    for line in lines:
-        parts = tokenize(line)
-        yield from skipgrams(parts, k)
-    
 def run(lines, k):
     assert k >= 0
     window_size = k + 2
