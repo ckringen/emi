@@ -1,0 +1,25 @@
+2017-05-10
+
+Using output/vp_observations.csv, which includes data about verb particle positioning in transitive verbs and information about the direct object, I find the following. When a verb and particle have pmi, then they are more likely to be adjacent. Furthermore, when the direct object is long AND the verb and particle have high pmi, then the particle is even more likely to be close (an interaction exists). This is the predict distance-pmi interaction in ordering preferences.
+
+
+
+2017-05-08
+
+data/vps.txt comes from Stefan Gries's book.
+data/verbs.regex is the verbs from those.
+code/filter_v.sh filters for those verbs.
+
+To get verb-particle counts, do
+python2 query.py '(VB|VBD|VBG|VBN|VBP|VBZ) >prt _' -m 0 -d '/om/user/futrell/en00aa.data/*.db' | python2 querypairs.py | sed "s/^.*\g//g" | python2 lemmatize_verbs.py | sh filter_v.sh > prtless_verbs.txt
+
+
+We need the counts of how often these verbs appear *without* particles.
+To do this,
+yse dep_search on the first parsed Common Crawl Parse file.
+python2 query.py '(VB|VBD|VBG|VBN|VBP|VBZ) !>prt _' -m 0 -d '/om/user/futrell/en00aa.data/*.db' | python2 querypairs.py | sed "s/^.*\g//g" | python2 lemmatize_verbs.py | sh filter_v.sh > prtless_verbs.txt
+
+Grab all verb-prt->_ things; lemmatize the verbs; filter them to be from Stefan Gries's list of verbs; then save those.
+
+
+
