@@ -1,6 +1,11 @@
 #!/bin/sh
 #SBATCH --mem=128G
 #SBATCH -t 5-0:00
+
+# Count skip-grams from common crawl files.
+# Parameters: num: which common crawl file to use (00 through 99)
+#             degree: skipgram degree. 0 is normal bigrams.
+
 num=$1
 degree=$2
 
@@ -11,9 +16,9 @@ counted_path=/om/user/futrell/en.$num-bigrams-$degree-counted.gz
 sorted_path=/om/user/futrell/en.$num-bigrams-$degree-sorted.gz
 summed_path=/om/user/futrell/en.$num-bigrams-$degree.xz
 
-count_script=~/emi/count_skipgrams.py
-uniqsum_script=~/emi/uniqsum.sh
-#count_script=~/emi/count_ngrams.py
+count_script=count_skipgrams.py
+uniqsum_script=uniqsum.sh
+#count_script=count_ngrams.py
 
 echo $data
 

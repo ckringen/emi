@@ -3,12 +3,19 @@
 Second argument is the field, by default word.
 Possible fields are id word lemma pos pos2 infl head rel extra notes
 """
+from __future__ import print_function
 import sys
 import itertools as it
 from functools import partial
 from collections import deque, namedtuple
 
 Line = namedtuple("Line", "id word lemma pos pos2 infl head rel extra notes".split())
+ROOT = Line('0', '_', '_', '_', '_', '_', '_', '_', '_', '_')
+
+try:
+    map = it.imap
+except NameError:
+    pass
 
 consume = partial(deque, maxlen=0)
 
@@ -68,15 +75,20 @@ def parse_query_hit(lines):
         depline = Line(*lines[hittoken - 1].split())
         assert int(depline.id) == hittoken
         head = int(depline.head)
-        headline = Line(*lines[head - 1].split())
-        assert int(headline.id) == head
-        yield headline, depline
+        if head == 0:
+            yield ROOT, depline, 0
+        else:
+            headline = Line(*lines[head - 1].split())
+            assert int(headline.id) == head, (head, headline, lines)
+            yield headline, depline, int(depline.id) - int(headline.id)
 
 def main(lines, field='word'):
     index = Line._fields.index(field)
     for hit in parse_query_results(lines):
-        for head, dep in hit:
-            print(head[index], dep[index], sep="\t")
+        for head, dep, d in hit:
+            one = head[index].lower()
+            two = dep[index].lower()
+            print(one, two, d, sep="\t")
 
 if __name__ == '__main__':
     main(sys.stdin, *sys.argv[1:])
