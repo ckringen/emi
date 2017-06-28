@@ -1,6 +1,9 @@
 2017-05-10
 
-Using output/vp_observations.csv, which includes data about verb particle positioning in transitive verbs and information about the direct object, I find the following. When a verb and particle have pmi, then they are more likely to be adjacent. Furthermore, when the direct object is long AND the verb and particle have high pmi, then the particle is even more likely to be close (an interaction exists). This is the predict distance-pmi interaction in ordering preferences.
+Using output/vp_observations.csv, which includes data about verb particle positioning in transitive verbs and information
+about the direct object, I find the following. When a verb and particle have pmi, then they are more likely to be adjacent.
+Furthermore, when the direct object is long AND the verb and particle have high pmi, then the particle is even more likely
+to be close (an interaction exists). This is the predict distance-pmi interaction in ordering preferences.
 
 
 
