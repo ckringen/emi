@@ -1,0 +1,11 @@
+How to preprocess your data to match the LMs.
+
+For all languages but English use this:
+
+(Example Spanish)
+cat el_data.txt | ./prepro_post_dedupe.sh es | ./prepro_tokenize.sh es truecasemodels/truecase-model.es
+
+For English do this:
+
+cat the_text.txt  | ./prepro_post_dedupe_en.sh en | ./prepro_tokenize_en.sh en truecasemodels/truecase-model.en 
+
