@@ -1,0 +1,153 @@
+#+Author: Chad Kringen
+#+Title: Studies in Cython 
+#+Date: <2017-07-01 Sat>
+
+* Objectives
+Determine if cython (possibly in addition to numpy and numba) is a viable
+way to write faster python code.
+
+* Overview
+** DONE learn about cython
+*** General use and syntax
+Imagine  a  simple  “hello  world”  script  in  a  file /hello.pyx/:
+
+#+begin_src python
+def say_hello_to(name):
+    print(Hello %s!" % name)
+#+end_src
+ 
+The following could be a corresponding /setup.py/ script:
+
+#+begin_src python
+from distutils.core import setup
+from distutils.extension import Extension
+from Cython.Distutils import build_ext
+
+ext_modules = [Extension("hello", ["hello.pyx"])]
+setup(
+    name = 'Hello world app',
+    cmdclass = {'build_ext': build_ext},
+    ext_modules = ext_modules
+)
+#+end_src
+
+To   build,    run:
+
+#+begin_src sh
+python setup.py build_ext --inplace
+#+end_src
+
+Then simply start a Python session
+and do
+
+#+begin_src python
+from hello import say_hello_to
+#+end_src
+
+using the imported function as you see fit.
+
+*** .pxd and Numpy
+.pxd files are analogous to header files, and must be imported in the .pyx with "cimport".
+One common file to import is the NumPy library.
+
+#+begin_src python
+import numpy as np
+cimport numpy as np
+
+def myfunc(np.ndarray[np.float64_T,ndim=2] A ):
+    cdef Py_ssize_t i, j
+    for i in range(A.shape[0]):
+       print A[i, 0] # fast
+       j = 2*i
+       print A[i, j] # fast
+       k = 2*i
+       print A[i, k] # slow, k is not typed
+       print A[i][j] # slow
+       print A[i,:]  # slow
+#+end_src
+
+Although fast array access can't be used with c(p)def functions.
+Corresponding types in cyton for numpy.
+
+#+begin_example python
+cdef packed struct Point:
+    np.float64_t x, y
+
+def f():
+    cdef np.ndarray[np.complex128_t, ndim=3] a = \
+    np.zeros((3,3,3), dtype=np.complex128)
+
+cdef np.ndarray[Point] b = np.zeros(10,
+    dtype=np.dtype([(’x’, np.float64),
+    (’y’, np.float64)]))
+#+end_example
+
+Such unaligned record arrays corresponds to a Cython
+packed struct. If one uses an aligned dtype, by passing
+align=True to the dtype constructor, one must drop the
+packed keyword on the struct definition.
+
+arr.shape is no longer a tuple. arr.shape[0]
+is valid but to e.g. print the shape one must do
+print (<object>arr).shape in order to “untype” the vari-
+able first.  The same is true for arr.data
+(which in typed mode is a C data pointer).
+
+*** C libraries
+there's a bunch of shit, i dunno
+
+*** Lessons
+1. cdef functions can't be called from outside cython code (e.g. in a main.py testing them)
+So we would need to compile our performance tests in cython, compile and run...
+2. pointers can't have python objects as base
+3. the "except *" syntax is only for cdef functions
+** TODO write a bst class in pure python and cython
+** TODO write performance tests for each and compare
+*** node class
+So it definitely looks like it scales better!
+# 10000
+aik@kazimir:~/PersonalProjects/PythonProjects/performance/cython$ time python main.py
+
+real	0m0.056s
+user	0m0.048s
+sys	0m0.004s
+aik@kazimir:~/PersonalProjects/PythonProjects/performance/cython$ time python prof_bst.py
+
+real	0m0.045s
+user	0m0.032s
+sys	0m0.008s
+
+# 100000
+aik@kazimir:~/PersonalProjects/PythonProjects/performance/cython$ time python main.py
+
+real	0m0.066s
+user	0m0.064s
+sys	0m0.004s
+aik@kazimir:~/PersonalProjects/PythonProjects/performance/cython$ time python prof_bst.py
+
+real	0m0.102s
+user	0m0.092s
+sys	0m0.008s
+
+# 1000000
+aik@kazimir:~/PersonalProjects/PythonProjects/performance/cython$ time python main.py
+
+real	0m0.270s
+user	0m0.260s
+sys	0m0.008s
+aik@kazimir:~/PersonalProjects/PythonProjects/performance/cython$ time python prof_bst.py
+
+real	0m0.768s
+user	0m0.764s
+sys	0m0.000s
+
+*** BST class
+results
+* Useful Links and Information
+http://conference.scipy.org/proceedings/SciPy2009/paper_1/full_text.pdf
+
+http://orgmode.org/worg/org-contrib/babel/intro.html
+
+http://docs.cython.org/en/latest/
+
+https://python.g-node.org/python-summerschool-2011/_media/materials/cython/cython-slides.pdf

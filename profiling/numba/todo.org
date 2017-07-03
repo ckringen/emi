@@ -1,0 +1,19 @@
+#+Title: Studies in Numba
+#+Author: Chad Kringen
+#+Date: <2017-07-02 Sun>
+
+* Overview
+Learn how to use numba, determine if it is a viable way to increase performance from python code.
+
+* Objectives
+** TODO learn how to use numba
+** TODO apply numba to bst example 
+
+* Useful Links and Information
+https://speakerdeck.com/teoliphant/performance-python-and-introduction-to-numba
+
+https://speakerdeck.com/teoliphant
+
+https://docs.continuum.io/docs_oss/numba/developer/architecture
+
+http://numba.pydata.org/
