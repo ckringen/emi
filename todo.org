@@ -10,3 +10,5 @@ The main pipeline for getting skipgram counts from the Common Crawl data is in c
 Once you get an MIT guest account and an OpenMind account (probably tomorrow), you will be able to try running it against the data and we can figure out if it would be possible to speed this up a lot.
 
 Best, R
+
+https://slurm.schedmd.com/
