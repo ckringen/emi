@@ -3,9 +3,6 @@ from setuptools import setup
 
 setup(
     name = "emi",
-    packages = ['src','test'],
-
-    # unparse, memory_profiler, line_profiler
-
+    packages = ['src', 'test', 'dependencies'],
     include_package_data=True,
 )
