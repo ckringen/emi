@@ -12,21 +12,33 @@ Organization
 The directory structure is as follows: 
 
 emi/
-   ├── build
-   ├── data
-   ├── dependencies
-   ├── dist
-   ├── emi.egg-info
-   ├── profiling
-   ├── README
-   ├── runProf.sh
-   ├── runTests.sh
-   ├── setup.py
-   ├── src
-   ├── test
-   └── todo.org
+	+-- build
+	|
+	+-- data
+	|
+	+-- dependencies
+	|
+	+-- dist
+	|
+	+-- emi.egg-info
+	|
+	+-- profiling
+	|
+	+-- README
+	|
+	+-- runProf.sh
+	|
+	+-- runTests.sh
+	|
+	+-- setup.py
+	|
+	+-- src
+	|  
+	+-- test
+	|
+	+-- todo.org
 
-with the major components simply being the *src/*, *test/*, and *profiling/* directories.  With test/, I will attempt to follow,
+with the major components simply being the src/, test/, and profiling/ directories.  With test/, I will attempt to follow,
 at least minimally, a test-driven development style, e.g. writing a failing test, writing the minimal necessary code to fix the
 failing test, then moving on.
 
@@ -39,7 +51,7 @@ behavior and memory usage of a given program.
 Setup
 -----
 Treating the emi project as a module, in good python fashion, means including a setup.py script in the root.  Practically,
-this means that we can have subdirectories (with "__init__.py" files) refer to each other without touching the PYTHON_PATH
+this means that we can have subdirectories (with __init__.py files) refer to each other without touching the PYTHON_PATH
 variable, so we can tell python where to find our libraries.  This, however, is more of a side-effect of the overall setup.py
 philosophy, which looks further ahead to deployment and shipping logistics.  Thus the main output of running
 setup.py is the creation and population of the build/, dist/, and emi.egg-info/ directories, which make the root look 
@@ -88,4 +100,4 @@ Contact Info
 
 + Richard Futrell : futrell@mit.edu
 
-+ Chad Kringenm : kringen1@gmail.com
++ Chad Kringen : kringen1@gmail.com
