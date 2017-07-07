@@ -3,12 +3,107 @@
 #+DATE:<2017-06-27 Tue>
 
 * Overview
+Investigate how to profile NLP algorithms in python, look for ways to improve performance.
+ 
 * Objectives
-* Useful Links and Information
+** TODO slurm scripts
+** DONE working examples of cython
+   CLOSED: [2017-07-03 Mon 10:12]
+** DONE working examples of numba
+   CLOSED: [2017-07-06 Thu 12:26]
+** DONE performance/profiling framework
+   CLOSED: [2017-07-06 Thu 01:25]
+Three profiling strategies: 
+
+1. cProfile : comes in the stdlib, used in conjunction with pstats, good overall
+#+BEGIN_SRC 
+python -m cProfile script.py
+#+END_SRC
+
+2. line_profiler : third party, line-by-line runtime information
+#+BEGIN_SRC 
+kernprof -l -m <script.py> -o prof.out
+python -m line_profiler prof.out
+#+END_SRC
+
+3. memory_profiler : third party, line-by-line information on memory consumption
+#+BEGIN_SRC 
+python -m memory_profiler <script.py>
+#+END_SRC
+
+Each needs "@profile" above the functions intended to be profiled in the source code.  
+To this end, we have decided to modify the code itself at runtime, to add the profile
+decorator to the appropriate list of functions.  So, the performance testing scripts
+import the source code as usual, but at this point, we employ the ast library (in the
+stdlib) to modify the syntax tree of the source code, to add the decorator, then use
+write performance tests around these functions.
+
+** DONE code reorganization
+   CLOSED: [2017-07-06 Thu 17:45]
+Need setup.py to register module paths, treat overall project as a module.
+Further, to use overall, after cloning, need to run:
+
+#+BEGIN_SRC 
+python setup.py build
+python setup.py install
+#+END_SRC
+
+** DONE tests for existing code
+   CLOSED: [2017-07-06 Thu 01:25]
+*** cython
+*** numba
+*** bits of count_skipgrams.py
+*** overall methodology
+** TODO speedup on n/skipgram counters
+* Directives
+2017-05-10
+
+Using output/vp_observations.csv, which includes data about verb particle positioning in transitive verbs and information
+about the direct object, I find the following. When a verb and particle have pmi, then they are more likely to be adjacent.
+Furthermore, when the direct object is long AND the verb and particle have high pmi, then the particle is even more likely
+to be close (an interaction exists). This is the predict distance-pmi interaction in ordering preferences.
+
+
+
+2017-05-08
+
+data/vps.txt comes from Stefan Gries's book.
+data/verbs.regex is the verbs from those.
+code/filter_v.sh filters for those verbs.
+
+To get verb-particle counts, do
+python2 query.py '(VB|VBD|VBG|VBN|VBP|VBZ) >prt _' -m 0 -d '/om/user/futrell/en00aa.data/*.db' | python2 querypairs.py | sed "s/^.*\g//g" | python2 lemmatize_verbs.py | sh filter_v.sh > prtless_verbs.txt
+
+
+We need the counts of how often these verbs appear *without* particles.
+To do this,
+yse dep_search on the first parsed Common Crawl Parse file.
+python2 query.py '(VB|VBD|VBG|VBN|VBP|VBZ) !>prt _' -m 0 -d '/om/user/futrell/en00aa.data/*.db' | python2 querypairs.py | sed "s/^.*\g//g" | python2 lemmatize_verbs.py | sh filter_v.sh > prtless_verbs.txt
+
+Grab all verb-prt->_ things; lemmatize the verbs; filter them to be from Stefan Gries's list of verbs; then save those.
+
+
+
+--------------------
+
 OK, I gave you access to the repo with the code for this project.
 The main pipeline for getting skipgram counts from the Common Crawl data is in code/countsortmerge.sh.
 Once you get an MIT guest account and an OpenMind account (probably tomorrow), you will be able to try running it against the data and we can figure out if it would be possible to speed this up a lot.
 
 Best, R
 
+* Useful Links and Information
+
+-- slurm scheduler
 https://slurm.schedmd.com/
+
+
+-- itertools library
+http://code.activestate.com/recipes/305588-simple-example-to-show-off-itertoolstee/
+https://stackoverflow.com/questions/6703594/is-the-result-of-itertools-tee-thread-safe-python
+
+https://stackoverflow.com/questions/13628934/itertools-islice-implementation-efficiently-slicing-a-list
+
+
+-- setting up the project as a moddule in good python fashion
+https://pythonhosted.org/an_example_pypi_project/setuptools.html

@@ -1,0 +1,17 @@
+setup.py
+emi.egg-info/PKG-INFO
+emi.egg-info/SOURCES.txt
+emi.egg-info/dependency_links.txt
+emi.egg-info/top_level.txt
+src/__init__.py
+src/combine_ngram_counts.py
+src/count_skipgrams.py
+src/marginalize_ngrams.py
+src/materialize_kenlm_ngrams.py
+src/pmi.py
+src/pym.py
+src/querypairs.py
+src/syntngrams_depmi.py
+src/verbparts.py
+test/__init__.py
+test/main_unittest.py
