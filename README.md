@@ -61,7 +61,31 @@ Although we're pushing (we've pushed) a version of the emi project that has alre
 the state of the project by running the following from the root, as per any pyPI package:
 
 $ python setup.py build
-$ python setup.py install
++$ python setup.py install+
+$ python setup.pu develop
+
+<2017-06-12>
+So I breezed over this when reading up on setup.py, but using the command "install" ends up preventing you from importing
+modified versions of the installed directories, e.g. I could not make a change to src/count_skipgrams.py, import that in
+profiling/main.py, and see the appropriate change.  It somehow caches the installed version.  You could then reinstall
+every time you make a change, but this clearly not ideal.
+
+I searched around for "updating module" and "reloading module" and "clearing sys module path," which led me to the apparently
+more fully-featured "importlib" module, but the following lines were still useless:
+
+improt importlib
+importlib.invalidate_caches()
+skip = importlib.import_module("src.count_skipgrams")
+skip = importlib.reload(skip)
+
+So I decided to just look at the setup.pu again, where I promptly found that running
+
+$ python setup.py develop
+
+allows imported modules to reflect changes in their source code, exactly as we want.  We can get craftier about "installing"
+and "developing" in the future.
+
+*sigh*
 
 
 Usage

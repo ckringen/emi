@@ -7,25 +7,31 @@ from collections import Counter
 BOS = "<s>"
 EOS = "</s>"
 
-def err(x):
-    print(x, file=sys.stderr)
-    sys.stderr.flush()
+def newfunc(x):
+    return x+2
 
-def ichunks(iterable, size):
-    while True:
-        yield itertools.islice(iterable, size)        
+# def err(x):
+#     print(x, file=sys.stderr)
+#     sys.stderr.flush()
 
-def tokenize(line):
-    parts = line.strip().split()
-    parts.insert(0, BOS) 
-    parts.append(EOS)
-    # Another option here would be to insert EOS and BOS k times.
-    # That would mean that in an ngram like "<s> the dog is big </s>",
-    # "<s> the" would count as a k-skip bigram for all k.
-    # This would be similar to the padding used by kenlm, which
-    # has e.g. 5grams like "<s> <s> <s> <s> the". On the other
-    # hand, it doesn't seem quite right to me.
-    return parts
+# def ichunks(iterable, size):
+#     while True:
+#         yield itertools.islice(iterable, size)        
+
+# def tokenize(line):
+#     parts = line.strip().split()
+#     parts.insert(0, BOS) 
+#     parts.append(EOS)
+#     # Another option here would be to insert EOS and BOS k times.
+#     # That would mean that in an ngram like "<s> the dog is big </s>",
+#     # "<s> the" would count as a k-skip bigram for all k.
+#     # This would be similar to the padding used by kenlm, which
+#     # has e.g. 5grams like "<s> <s> <s> <s> the". On the other
+#     # hand, it doesn't seem quite right to me.
+
+#     print("parts are: ", parts)
+    
+#     return parts
 
 # en.00.xz is 380,996,016 lines
 # bible.txt is 33802 lines
@@ -50,22 +56,35 @@ def tokenize(line):
 # How about breaking long files into multiple counts, writing those out,
 # and then merging them? (Is the merge truly O(1) space in the average case?)
 
-flat = itertools.chain.from_iterable
+# flat = itertools.chain.from_iterable
 
-def run(lines, k):
-    assert k >= 0
-    window_size = k + 2
-    def get_skipgrams(xs): # gets called as many times as there are lines
-        its = itertools.tee(xs, window_size)
-        for i, iterator in enumerate(its):
-            for _ in range(i):
-                next(iterator)
-        for block in zip(*its):
-            yield block[0], block[-1]
-    grams = flat(map(get_skipgrams, map(tokenize, lines)))
-    # All the work happens here:
-    counts = Counter(grams) # goes to optimized C subroutine _count_elements 
-    return counts.items()
+# def run(lines, k):
+
+#     print("lines is: ", [i for i in lines], type(lines))
+    
+#     assert k >= 0
+#     window_size = k + 2
+
+#     def get_skipgrams(xs): # gets called as many times as there are lines
+
+#         print("xs is ", type(xs))
+
+#         its = itertools.tee(xs, window_size)
+#         for i, iterator in enumerate(its):
+#             for _ in range(i):
+#                 next(iterator)
+#         for block in zip(*its):
+#             yield block[0], block[-1]
+
+#     a = map(tokenize,lines); print(a)
+#     b = map(get_skipgrams,a); print(b)
+#     g = flat(b); print(g)
+
+#     grams = flat(map(get_skipgrams, map(tokenize, lines)))
+    
+#     # All the work happens here:
+#     counts = Counter(grams) # goes to optimized C subroutine _count_elements 
+#     return counts.items()
 
 # Ideas:
 # (1) insert stuff into a bst
@@ -113,15 +132,15 @@ def run(lines, k):
 #             130926 lines processed
 # It takes 15 iterations of s=10000---seems like it should take 14?
 
+def myfunc(k, text, s=None ):
 
-def main(k, s=None):
     err("Beginning skipgram counts")
     k = int(k)
     if s is None:
-        chunks = [sys.stdin]
+        chunks = [text]
     else:
         s = int(s)
-        chunks = ichunks(sys.stdin, s)
+        chunks = ichunks(text, s)
     for chunk in chunks:
         err("Counting skipgrams...")
         result = run(chunk, k)
@@ -132,8 +151,34 @@ def main(k, s=None):
         else:
             break
 
-if __name__ == '__main__':
-    main(*sys.argv[1:])
-                
+# def main(k, s=None ):
+#     err("Beginning skipgram counts")
+#     k = int(k)
+    
+#     if s is None:
+#         chunks = [sys.stdin]
+#     else:
+#         s = int(s)
+#         chunks = ichunks(sys.stdin, s)
+
+#     for chunk in chunks:
+#         err("Counting skipgrams...")
+#         result = run(chunk, k)
+#         err("Printing %s skipgrams..." % len(result))
+#         if result:
+#             for key, count in result:
+#                 print(" ".join(key), count, sep="\t")
+#         else:
+#             break
 
 
+
+
+# if __name__ == '__main__':
+
+#     #main(*sys.argv[1:])
+    
+#     #main( 2, text, 100000 )
+
+
+    

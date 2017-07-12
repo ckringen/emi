@@ -1,0 +1,84 @@
+
+#+title: On Memory-mapped Data Structures
+#+author: Chad Kringen
+#+date: <2017-07-08 Sat>
+
+* Overview
+Learn how to mmap files and objects, determine if that represents a natural way to 
+solve heavy memory-use problems.
+
+* Objectives
+*** DONE Research
+    CLOSED: [2017-07-10 Mon 23:56]
+The gist is that you don't pull data from disk into RAM, where it is mapped into the program's virtual memory, but
+directly read it as a bytes object.  
+
+The general idea then is to read in a fixed-size chunk, mmap it, process, munmap it, then repeat.
+Because you could be looking for something that overlaps the end of one and beginning of the next block, you need to "window"
+the map, such that you account for this overlap.  
+
+*** DONE python mmap
+    CLOSED: [2017-07-10 Mon 23:56]
+    To create an mmap'ed file, you need to use the file object's fileno function to return a file descriptor.  Can alternatively
+    use os.open( ) to directly return a file descriptor.
+
+    #+BEGIN_SRC python
+    import mmap
+
+    if __name__ == "__main__":
+    
+        with open("NUT_DATA.txt", "r+b") as f:
+            mm = mmap.mmap( f.fileno( ), 0, access=nmap.ACCESS_READ( ) )
+            print(mm[:10])
+    #+END_SRC
+
+
+    _timing results_
+
+    | size (bytes) | Normal time elapsed |   mmap time elapsed |
+    |--------------+---------------------+---------------------|
+    |           64 |  0.6675355434417725 | 0.21389198303222656 |
+    |              |                     |                     |
+
+*** TODO C/C++ mmap
+
+* Useful Links and Information
+*** general
+http://man7.org/linux/man-pages/man2/mmap.2.html
+
+https://en.wikipedia.org/wiki/Memory-mapped_file
+
+https://docs.microsoft.com/en-us/dotnet/standard/io/memory-mapped-files
+
+- top answer suggests mmap is only good for random and peresistent access.  This is contrasts with, I think,
+reading binary, i.e. reading by bytes.  Worth testing against!
+https://stackoverflow.com/questions/45972/mmap-vs-reading-blocks
+
+https://stackoverflow.com/questions/9817233/why-mmap-is-faster-than-sequential-io
+
+https://beej.us/guide/bgipc/output/html/multipage/mmap.html
+
+*** python
+https://docs.python.org/3.6/library/mmap.html
+
+https://docs.python.org/3.6/library/contextlib.html
+
+http://pythoncentral.io/memory-mapped-mmap-file-support-in-python/
+
+https://stackoverflow.com/questions/3640092/python-ctypes-and-mmap
+
+https://stackoverflow.com/questions/14289421/how-to-use-mmap-in-python-when-the-whole-file-is-too-big
+
+http://www.programcreek.com/python/example/1643/mmap.mmap
+
+https://docs.scipy.org/doc/numpy/reference/generated/numpy.memmap.html
+
+https://stackoverflow.com/questions/21533391/seeking-from-end-of-file-throwing-unsupported-exception
+
+*** C/C++
+
+https://www.gnu.org/software/libc/manual/html_node/Memory_002dmapped-I_002fO.html
+
+http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2044.html
+
+https://stackoverflow.com/questions/14337517/writing-struct-to-mapped-memory-file-mmap

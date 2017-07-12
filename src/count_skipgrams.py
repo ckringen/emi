@@ -25,6 +25,9 @@ def tokenize(line):
     # This would be similar to the padding used by kenlm, which
     # has e.g. 5grams like "<s> <s> <s> <s> the". On the other
     # hand, it doesn't seem quite right to me.
+
+    # print("parts are: ", parts)
+    
     return parts
 
 # en.00.xz is 380,996,016 lines
@@ -53,16 +56,29 @@ def tokenize(line):
 flat = itertools.chain.from_iterable
 
 def run(lines, k):
+
+    # print("lines is: ", [i for i in lines], type(lines))
+    
     assert k >= 0
     window_size = k + 2
+
     def get_skipgrams(xs): # gets called as many times as there are lines
+
+        # print("xs is ", type(xs))
+
         its = itertools.tee(xs, window_size)
         for i, iterator in enumerate(its):
             for _ in range(i):
                 next(iterator)
         for block in zip(*its):
             yield block[0], block[-1]
+
+    # a = map(tokenize,lines); print(a)
+    # b = map(get_skipgrams,a); print(b)
+    # g = flat(b); print(g)
+
     grams = flat(map(get_skipgrams, map(tokenize, lines)))
+    
     # All the work happens here:
     counts = Counter(grams) # goes to optimized C subroutine _count_elements 
     return counts.items()
@@ -113,15 +129,15 @@ def run(lines, k):
 #             130926 lines processed
 # It takes 15 iterations of s=10000---seems like it should take 14?
 
+def main2(k, text, s=None ):
 
-def main(k, s=None):
     err("Beginning skipgram counts")
     k = int(k)
     if s is None:
-        chunks = [sys.stdin]
+        chunks = [text]
     else:
         s = int(s)
-        chunks = ichunks(sys.stdin, s)
+        chunks = ichunks(text, s)
     for chunk in chunks:
         err("Counting skipgrams...")
         result = run(chunk, k)
@@ -132,8 +148,32 @@ def main(k, s=None):
         else:
             break
 
+def main(k, s=None ):
+    err("Beginning skipgram counts")
+    k = int(k)
+    
+    if s is None:
+        chunks = [sys.stdin]
+    else:
+        s = int(s)
+        chunks = ichunks(sys.stdin, s)
+
+    for chunk in chunks:
+        err("Counting skipgrams...")
+        result = run(chunk, k)
+        err("Printing %s skipgrams..." % len(result))
+        if result:
+            for key, count in result:
+                print(" ".join(key), count, sep="\t")
+        else:
+            break
+
+
+
+
 if __name__ == '__main__':
-    main(*sys.argv[1:])
-                
 
+    #main(*sys.argv[1:])
 
+    text = "Here Here is is is a a a a is a is a fairly good good fairly example of example of a piece of text of text."
+    main2( 2, text, 100000 )

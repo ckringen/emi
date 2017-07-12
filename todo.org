@@ -54,7 +54,54 @@ python setup.py install
 *** numba
 *** bits of count_skipgrams.py
 *** overall methodology
-** TODO speedup on n/skipgram counters
+
+** TODO refactor profiling module 
+   Base off of google benchmark, which I used in a previous C++ project.
+   The idea is that make every test a standalone function, e.g. a static/global func, 
+   and then decorate those with a profile class that gives us an iterator, 
+   maybe a setup/tear-down method.
+
+   We also need to refactor how we call the runProf.sh script.  I think we only need one flag
+   for the type of profiler, and an output file argument.
+
+*** TODO profile class for each profiler
+    1. [X] cProfile
+    2. [ ] MemoryProfiler
+    3. [ ] LineProfiler
+
+*** TODO base class for the above
+    Should have macro methods and such in it
+
+*** TODO print stats data as csv
+    1. [X] main calls
+    2. [ ] subcalls
+
+*** TODO macro for running a benchmark on increasingly larger data
+    I think this should work just like a decorator that builds a chunk of data according to some given parameter
+    and then calls the to-be-profiled function on it repeatedly for larger and larger data
+
+*** TODO get some actual results
+
+** TODO coroutines for data pipelining
+   So I think the coroutines would just wrap the following sequence:
+   1. pushing the data in
+   2. get skipgram
+   3. flat mapping them
+   4. runnng the counter
+
+   And it seems like this is a beneficial strategy because it
+   a). doesn't constantly create and destroy functions on the stack
+       the way they are in a nested function call pipeline
+   b). allows you to work on multiple stages at once, e.g. pushing data in
+       while you get skipgrams, while you flat map a bunch of grams, while
+       you run the counter
+
+** TODO memory map files to feed to functions
+   Need to just benchmark this.  Time access for a large file via:
+   1. readlines/yield statement
+   2. binary read
+   3. mmapp'ed binary read
+
 * Directives
 2017-05-10
 
@@ -107,3 +154,11 @@ https://stackoverflow.com/questions/13628934/itertools-islice-implementation-eff
 
 -- setting up the project as a moddule in good python fashion
 https://pythonhosted.org/an_example_pypi_project/setuptools.html
+
+
+-- python, general
+https://julien.danjou.info/blog/2013/guide-python-static-class-abstract-methods
+
+
+-- google benchmark
+https://github.com/google/benchmark

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 PROF=profiling
+funcs=${1:-""}  # pass in a list of functions you'd like to profile, defaults to all
 
 # A POSIX variable
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
@@ -24,11 +25,9 @@ while getopts "h?lmco:" opt; do
         show_help
         exit 0
         ;;
-    l)  pushd $PROF; python main.py 2; popd
-	# pushd $PROF; kernprof -l main.py; python -m line_profiler main.py.lprof; popd
+    l)  pushd $PROF; python main.py 2 $funcs; popd
         ;;
-    m)  pushd $PROF; python main.py 1; popd
-	#pushd $PROF; python -m memory_profiler main.py; popd
+    m)  pushd $PROF; python main.py 1 $funcs; popd
         ;;
     c)  pushd $PROF; python -m cProfile main.py; popd
 	;;
