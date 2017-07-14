@@ -21,6 +21,8 @@ def ichunks(iterable, size):
         yield itertools.islice(iterable, size)        
 
 def tokenize(line):
+
+    print("tokenizing")
     parts = line.strip().split()
     parts.insert(0, BOS) 
     parts.append(EOS)
@@ -67,6 +69,8 @@ def run(lines, k):
 
     def get_skipgrams(xs): # gets called as many times as there are lines
 
+        print("getting skipgrams")
+        
         its = itertools.tee(xs, window_size)   # so xs is an iterable, such that it can return an iterator
         for i, iterator in enumerate(its):
             for _ in range(i):
@@ -75,6 +79,8 @@ def run(lines, k):
             yield block[0], block[-1]
 
     grams = flat(map(get_skipgrams, map(tokenize, lines)))
+
+    print(type(grams))
     
     # All the work happens here:
     counts = Counter(grams) # goes to optimized C subroutine _count_elements 
@@ -189,4 +195,6 @@ def getSkipgrams(xs): # gets called as many times as there are lines
         
 if __name__ == '__main__':
 
-    main2(sys.argv[1:])
+    main(*sys.argv[1:])        
+
+    # main2(f,0,100000)

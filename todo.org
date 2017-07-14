@@ -97,6 +97,20 @@ python setup.py install
     |                          |         |          |            |                             |
                   
 ** TODO concurrency
+   Try factoring out the data processing pipeline (chunking, tokenizing, skipgramming, counting) using concurrent tools
+*** TODO async
+    Use the asyncio library for lots of small tasks that don't take too long to complete
+
+*** TODO threads
+    We have a few option here
+    1. threading: from the stdlib
+    2. concurrent.futures
+    3. greenlets and gevent
+
+*** TODO processes
+    The major tool here is the multiprocessing (multithreading) module from the stdlib, I think.  There must be 
+    some interesting interaction between multiprocessing and the slurm scheduler, right? 
+
 ** TODO memory map files to feed to functions
    Need to just benchmark this.  Time access for a large file via:
    1. readlines/yield statement

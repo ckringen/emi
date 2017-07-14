@@ -1,0 +1,12 @@
+
+import asyncio
+
+def tokenize( s ):
+    return s.split()
+
+def readByChunk( fd ):
+    f = fileinput.input(files=(fd))
+    while True:
+        it = list(itertools.islice(f, 100000 ))
+        if not it:
+            break
