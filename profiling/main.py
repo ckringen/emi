@@ -72,11 +72,13 @@ def bench_read_stdin( ):
     sentinel = object( )
 
     # choose whichever has less overhead
+    # a.
     while True:
         it = list(itertools.islice(f, 1, 200 ))
         if not it:
             break
 
+    # b.
     # while True:
     #     it = itertools.islice(f, 1, 200 )
     #     print([i for i in it])
@@ -106,12 +108,10 @@ def bench_read_bytes( ):
     
 @timer
 def bench_read_mmap( mmap_file ):
-    ''' read from memory-mapped file by bytes '''
-    # assuming islice-size and buffer-size are the same...'''
+    ''' read from memory-mapped file by bytes, assuming islice-size and buffer-size are the same '''
 
     buffer_size = 100000
 
-    # might be a better way to do this
     while True:
         buf = m.seek(buffer_size, os.SEEK_CUR)
         if not buf:
@@ -130,7 +130,7 @@ if __name__ == "__main__":
         # must be overhead in creating file object and then reading from it?
         print( bench_read_file( ))        # 0.003299713134765625
 
-        # # sys.stdin is treated as a file object, but there must be less overhead, consistently faster 
+        # # sys.stdin is treated as a file object, but there might be less overhead
         print( bench_read_stdin( ) )      # 0.0073833465576171875
 
         print( bench_read_bytes( ) )     # 0.0012459754943847656

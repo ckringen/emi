@@ -64,6 +64,17 @@ python setup.py install
    We also need to refactor how we call the runProf.sh script.  I think we only need one flag
    for the type of profiler, and an output file argument.
 
+   _sample google benchmark output_
+
+    | Benchmark                | Time    | CPU      | Iterations |                UserCounters |
+    |--------------------------+---------+----------+------------+-----------------------------|
+    | BM_UserCounter/threads:8 | 2248 ns | 10277 ns |      68808 |  Bar=16 Bat=40 Baz=24 Foo=8 |
+    | BM_UserCounter/threads:1 | 9797 ns | 9788 ns  |      71523 | Bar=2 Bat=5 Baz=3 Foo=1024m |
+    | BM_CalculatePiRange/1    | 16 ns   | 16 ns    |   45704255 |                           0 |
+    | BM_CalculatePiRange/8    | 73 ns   | 73 ns    |    9520927 |                     3.28374 |
+    | BM_CalculatePiRange/64   | 609 ns  | 609 ns   |    1140647 |                     3.15746 |
+    |                          |         |          |            |                             |
+                  
 *** TODO profile class for each profiler
     1. [X] cProfile
     2. [ ] MemoryProfiler
@@ -83,22 +94,13 @@ python setup.py install
     as well as obfuscates caller v. callee.  To that end, we also just wrap the pstats module's print function
 
 *** TODO print each benchmark to its own file, or delineate in some way
-*** TODO get some results
+*** DONE get some results
+    CLOSED: [2017-07-14 Fri 10:32]
 *** TODO use AST to clean up runProf.sh
-*** sample google benchmark output
-
-    | Benchmark                | Time    | CPU      | Iterations |                UserCounters |
-    |--------------------------+---------+----------+------------+-----------------------------|
-    | BM_UserCounter/threads:8 | 2248 ns | 10277 ns |      68808 |  Bar=16 Bat=40 Baz=24 Foo=8 |
-    | BM_UserCounter/threads:1 | 9797 ns | 9788 ns  |      71523 | Bar=2 Bat=5 Baz=3 Foo=1024m |
-    | BM_CalculatePiRange/1    | 16 ns   | 16 ns    |   45704255 |                           0 |
-    | BM_CalculatePiRange/8    | 73 ns   | 73 ns    |    9520927 |                     3.28374 |
-    | BM_CalculatePiRange/64   | 609 ns  | 609 ns   |    1140647 |                     3.15746 |
-    |                          |         |          |            |                             |
-                  
 ** TODO concurrency
    Try factoring out the data processing pipeline (chunking, tokenizing, skipgramming, counting) using concurrent tools
-*** TODO async
+*** DONE async
+    CLOSED: [2017-07-14 Fri 10:35]
     Use the asyncio library for lots of small tasks that don't take too long to complete
 
 *** TODO threads
@@ -111,7 +113,8 @@ python setup.py install
     The major tool here is the multiprocessing (multithreading) module from the stdlib, I think.  There must be 
     some interesting interaction between multiprocessing and the slurm scheduler, right? 
 
-** TODO memory map files to feed to functions
+** DONE memory map files to feed to functions
+   CLOSED: [2017-07-14 Fri 10:35]
    Need to just benchmark this.  Time access for a large file via:
    1. readlines/yield statement
    2. binary read

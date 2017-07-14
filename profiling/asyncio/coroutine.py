@@ -1,5 +1,6 @@
 
-# this kind of works!
+# chain data processing steps together via asynchronous coroutines instead of generators on the stack
+# kind of works!
 
 import time
 import fileinput

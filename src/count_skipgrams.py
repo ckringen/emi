@@ -23,6 +23,7 @@ def ichunks(iterable, size):
 def tokenize(line):
 
     print("tokenizing")
+
     parts = line.strip().split()
     parts.insert(0, BOS) 
     parts.append(EOS)
@@ -80,7 +81,7 @@ def run(lines, k):
 
     grams = flat(map(get_skipgrams, map(tokenize, lines)))
 
-    print(type(grams))
+    # print(type(grams))
     
     # All the work happens here:
     counts = Counter(grams) # goes to optimized C subroutine _count_elements 

@@ -1,6 +1,6 @@
 
 # wrapper around cProfile
-# god this needs to be redesigned
+# needs to be redesigned
 
 import cProfile
 import pstats
@@ -26,6 +26,7 @@ class CPerf( ):
         s.enable( )
         self.func( )
         s.disable( )
+
         logAsCSV( s )
 
         
