@@ -1,9 +1,14 @@
+
 """ Count skip bigrams. A 0-skip bigram count is a regular bigram count, a count
 of w1 and w2. A 1-skip bigram is a count of w1 and w3, etc. Read from stdin. """
+
 import sys
 import itertools
 from collections import Counter
 
+import fileinput
+
+    
 BOS = "<s>"
 EOS = "</s>"
 
@@ -56,26 +61,18 @@ def tokenize(line):
 flat = itertools.chain.from_iterable
 
 def run(lines, k):
-
-    # print("lines is: ", [i for i in lines], type(lines))
     
     assert k >= 0
     window_size = k + 2
 
     def get_skipgrams(xs): # gets called as many times as there are lines
 
-        # print("xs is ", type(xs))
-
-        its = itertools.tee(xs, window_size)
+        its = itertools.tee(xs, window_size)   # so xs is an iterable, such that it can return an iterator
         for i, iterator in enumerate(its):
             for _ in range(i):
                 next(iterator)
         for block in zip(*its):
             yield block[0], block[-1]
-
-    # a = map(tokenize,lines); print(a)
-    # b = map(get_skipgrams,a); print(b)
-    # g = flat(b); print(g)
 
     grams = flat(map(get_skipgrams, map(tokenize, lines)))
     
@@ -83,6 +80,7 @@ def run(lines, k):
     counts = Counter(grams) # goes to optimized C subroutine _count_elements 
     return counts.items()
 
+    
 # Ideas:
 # (1) insert stuff into a bst
 # (2) initialize an array of hashes for the first word, then sort within the
@@ -129,18 +127,24 @@ def run(lines, k):
 #             130926 lines processed
 # It takes 15 iterations of s=10000---seems like it should take 14?
 
-def main2(k, text, s=None ):
 
+
+def main2(textfile, k, s=None ):
+    ''' textfile can be a regular file, or a fileobject, e.g. sys.stdin '''
     err("Beginning skipgram counts")
     k = int(k)
+
     if s is None:
         chunks = [text]
+
     else:
         s = int(s)
         chunks = ichunks(text, s)
+        
     for chunk in chunks:
         err("Counting skipgrams...")
         result = run(chunk, k)
+
         err("Printing %s skipgrams..." % len(result))
         if result:
             for key, count in result:
@@ -148,6 +152,7 @@ def main2(k, text, s=None ):
         else:
             break
 
+        
 def main(k, s=None ):
     err("Beginning skipgram counts")
     k = int(k)
@@ -170,10 +175,18 @@ def main(k, s=None ):
 
 
 
+def getSkipgrams(xs): # gets called as many times as there are lines
 
+    print("xs is ", xs)
+
+    its = itertools.tee(xs, 2)   # so xs is an iterable, such that it can return an iterator
+    for i, iterator in enumerate(its):
+        for _ in range(i):
+            next(iterator)
+    for block in zip(*its):
+        yield block[0], block[-1]
+
+        
 if __name__ == '__main__':
 
-    #main(*sys.argv[1:])
-
-    text = "Here Here is is is a a a a is a is a fairly good good fairly example of example of a piece of text of text."
-    main2( 2, text, 100000 )
+    main2(sys.argv[1:])

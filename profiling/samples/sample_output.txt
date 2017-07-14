@@ -1,0 +1,106 @@
+call info:  1	1	0.0	0.0 	 <method 'disable' of '_lsprof.Profiler' objects>
+call info:  3	3	1.7e-05	5.3e-05 	 err
+call info:  1	1	9e-06	9e-06 	 <listcomp>
+call info:  1	1	2.6e-05	0.000359 	 run
+call info:  1	1	1.6e-05	0.00043099999999999996 	 main2
+call info:  2	2	4e-06	4e-06 	 ichunks
+call info:  1	1	1.7e-05	0.000258 	 __init__
+call info:  1	1	9.999999999999999e-06	0.00024099999999999998 	 update
+call info:  1	1	0.0	0.0 	 <method 'items' of 'dict' objects>
+call info:  14	14	4e-06	4e-06 	 <method 'add' of 'set' objects>
+call info:  7	7	2e-06	2e-06 	 <method 'remove' of 'set' objects>
+call info:  7	7	4e-06	4e-06 	 <method '__subclasses__' of 'type' objects>
+call info:  7	7	3e-06	3e-06 	 <built-in method builtins.getattr>
+call info:  1	1	4.9999999999999996e-06	0.000227 	 <built-in method builtins.isinstance>
+call info:  8	2	4.9999999999999996e-06	0.00014099999999999998 	 <built-in method builtins.issubclass>
+call info:  3	3	0.0	0.0 	 <built-in method builtins.len>
+call info:  7	7	9.7e-05	9.7e-05 	 <built-in method builtins.print>
+call info:  1	1	4e-06	4e-06 	 <built-in method _collections._count_elements>
+call info:  2	2	1e-06	1e-06 	 <built-in method from_iterable>
+call info:  3	3	4e-06	4e-06 	 <method 'flush' of '_io.TextIOWrapper' objects>
+call info:  7	7	3e-06	3e-06 	 __subclasshook__
+call info:  1	1	8e-06	0.00043999999999999996 	 bench_count_skipgrams_main
+call info:  1	1	1.1e-05	0.000222 	 __instancecheck__
+call info:  7	1	8.999999999999999e-05	0.000208 	 __subclasscheck__
+call info:  7	7	7e-06	7e-06 	 __init__
+call info:  7	7	1.3e-05	1.6e-05 	 __enter__
+call info:  7	7	1.1e-05	1.8999999999999998e-05 	 __exit__
+call info:  3	3	1.4e-05	1.4e-05 	 __init__
+call info:  7	7	6e-06	6e-06 	 _commit_removals
+call info:  9	9	2.8e-05	7e-05 	 __iter__
+call info:  12	12	1.2e-05	1.2e-05 	 __contains__
+call info:  7	7	9e-06	9.999999999999999e-06 	 add
+subcall info:  3	3	3.2e-05	3.2e-05 	 err
+if func in callers:  3	3	3.2e-05	3.2e-05 	 err
+subcall info:  3	3	4e-06	4e-06 	 err
+if func in callers:  3	3	4e-06	4e-06 	 err
+subcall info:  4	4	6.5e-05	6.5e-05 	 run
+if func in callers:  4	4	6.5e-05	6.5e-05 	 run
+subcall info:  2	2	1e-06	1e-06 	 run
+if func in callers:  2	2	1e-06	1e-06 	 run
+subcall info:  1	1	1.7e-05	0.000258 	 run
+if func in callers:  1	1	1.7e-05	0.000258 	 run
+subcall info:  1	1	9e-06	9e-06 	 run
+if func in callers:  1	1	9e-06	9e-06 	 run
+subcall info:  1	1	0.0	0.0 	 run
+if func in callers:  1	1	0.0	0.0 	 run
+subcall info:  1	1	0.0	0.0 	 main2
+if func in callers:  1	1	0.0	0.0 	 main2
+subcall info:  1	1	3e-06	3e-06 	 main2
+if func in callers:  1	1	3e-06	3e-06 	 main2
+subcall info:  3	3	1.7e-05	5.3e-05 	 main2
+if func in callers:  3	3	1.7e-05	5.3e-05 	 main2
+subcall info:  1	1	2.6e-05	0.000359 	 main2
+if func in callers:  1	1	2.6e-05	0.000359 	 main2
+subcall info:  1	1	0.0	0.0 	 __init__
+if func in callers:  1	1	0.0	0.0 	 __init__
+subcall info:  1	1	9.999999999999999e-06	0.00024099999999999998 	 __init__
+if func in callers:  1	1	9.999999999999999e-06	0.00024099999999999998 	 __init__
+subcall info:  1	1	0.0	0.0 	 update
+if func in callers:  1	1	0.0	0.0 	 update
+subcall info:  1	1	4.9999999999999996e-06	0.000227 	 update
+if func in callers:  1	1	4.9999999999999996e-06	0.000227 	 update
+subcall info:  1	1	4e-06	4e-06 	 update
+if func in callers:  1	1	4e-06	4e-06 	 update
+subcall info:  1	1	1.1e-05	0.000222 	 <built-in method builtins.isinstance>
+if func in callers:  1	1	1.1e-05	0.000222 	 <built-in method builtins.isinstance>
+subcall info:  6	1	5.9999999999999995e-05	0.000138 	 <built-in method builtins.issubclass>
+if func in callers:  6	1	5.9999999999999995e-05	0.000138 	 <built-in method builtins.issubclass>
+subcall info:  1	1	1e-06	1e-06 	 bench_count_skipgrams_main
+if func in callers:  1	1	1e-06	1e-06 	 bench_count_skipgrams_main
+subcall info:  1	1	1.6e-05	0.00043099999999999996 	 bench_count_skipgrams_main
+if func in callers:  1	1	1.6e-05	0.00043099999999999996 	 bench_count_skipgrams_main
+subcall info:  1	1	3e-06	3e-06 	 __instancecheck__
+if func in callers:  1	1	3e-06	3e-06 	 __instancecheck__
+subcall info:  1	1	2.9999999999999997e-05	0.000208 	 __instancecheck__
+if func in callers:  1	1	2.9999999999999997e-05	0.000208 	 __instancecheck__
+subcall info:  7	7	9e-06	9.999999999999999e-06 	 __subclasscheck__
+if func in callers:  7	7	9e-06	9.999999999999999e-06 	 __subclasscheck__
+subcall info:  7	7	3e-06	3e-06 	 __subclasscheck__
+if func in callers:  7	7	3e-06	3e-06 	 __subclasscheck__
+subcall info:  8	2	4.9999999999999996e-06	0.00014099999999999998 	 __subclasscheck__
+if func in callers:  8	2	4.9999999999999996e-06	0.00014099999999999998 	 __subclasscheck__
+subcall info:  11	11	9e-06	9e-06 	 __subclasscheck__
+if func in callers:  11	11	9e-06	9e-06 	 __subclasscheck__
+subcall info:  3	3	1.4e-05	1.4e-05 	 __subclasscheck__
+if func in callers:  3	3	1.4e-05	1.4e-05 	 __subclasscheck__
+subcall info:  7	7	3e-06	3e-06 	 __subclasscheck__
+if func in callers:  7	7	3e-06	3e-06 	 __subclasscheck__
+subcall info:  9	9	2.8e-05	7e-05 	 __subclasscheck__
+if func in callers:  9	9	2.8e-05	7e-05 	 __subclasscheck__
+subcall info:  7	7	4e-06	4e-06 	 __subclasscheck__
+if func in callers:  7	7	4e-06	4e-06 	 __subclasscheck__
+subcall info:  7	7	3e-06	3e-06 	 __enter__
+if func in callers:  7	7	3e-06	3e-06 	 __enter__
+subcall info:  7	7	2e-06	2e-06 	 __exit__
+if func in callers:  7	7	2e-06	2e-06 	 __exit__
+subcall info:  7	7	6e-06	6e-06 	 __exit__
+if func in callers:  7	7	6e-06	6e-06 	 __exit__
+subcall info:  7	7	1.3e-05	1.6e-05 	 __iter__
+if func in callers:  7	7	1.3e-05	1.6e-05 	 __iter__
+subcall info:  7	7	1.1e-05	1.8999999999999998e-05 	 __iter__
+if func in callers:  7	7	1.1e-05	1.8999999999999998e-05 	 __iter__
+subcall info:  7	7	7e-06	7e-06 	 __iter__
+if func in callers:  7	7	7e-06	7e-06 	 __iter__
+subcall info:  7	7	1e-06	1e-06 	 add
+if func in callers:  7	7	1e-06	1e-06 	 add

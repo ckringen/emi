@@ -40,8 +40,6 @@ the map, such that you account for this overlap.
     |           64 |  0.6675355434417725 | 0.21389198303222656 |
     |              |                     |                     |
 
-*** TODO C/C++ mmap
-
 * Useful Links and Information
 *** general
 http://man7.org/linux/man-pages/man2/mmap.2.html

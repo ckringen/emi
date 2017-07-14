@@ -39,10 +39,11 @@ class CPerf( ):
             stats.disable( )
 
             cls.printCSV( stats, *args )
-            print( )
-            cls.printPstats( stats, *args )
+            # print( )
+            # cls.printPstats( stats, *args )
             
-        
+
+    # # --- printing methods --- # # 
     @classmethod
     def printPstats( cls, stats, fname ):
         ''' the output you get from pstats, left in because I'm positive the csv option is innacurate ''' 

@@ -68,34 +68,35 @@ python setup.py install
     1. [X] cProfile
     2. [ ] MemoryProfiler
     3. [ ] LineProfiler
+    4. [X] time
 
 *** TODO base class for the above
     Should have macro methods and such in it
 
-*** TODO print stats data as csv
-    1. [X] main calls
-    2. [ ] subcalls
-
-*** TODO macro for running a benchmark on increasingly larger data
+*** TODO ranges macro
     I think this should work just like a decorator that builds a chunk of data according to some given parameter
     and then calls the to-be-profiled function on it repeatedly for larger and larger data
 
-*** TODO get some actual results
+*** DONE print stats data as csv
+    CLOSED: [2017-07-12 Wed 19:51]
+    We ended up just doing main calls from the cProfile getstats( ) function.  This omits subcalls,
+    as well as obfuscates caller v. callee.  To that end, we also just wrap the pstats module's print function
 
-** TODO coroutines for data pipelining
-   So I think the coroutines would just wrap the following sequence:
-   1. pushing the data in
-   2. get skipgram
-   3. flat mapping them
-   4. runnng the counter
+*** TODO print each benchmark to its own file, or delineate in some way
+*** TODO get some results
+*** TODO use AST to clean up runProf.sh
+*** sample google benchmark output
 
-   And it seems like this is a beneficial strategy because it
-   a). doesn't constantly create and destroy functions on the stack
-       the way they are in a nested function call pipeline
-   b). allows you to work on multiple stages at once, e.g. pushing data in
-       while you get skipgrams, while you flat map a bunch of grams, while
-       you run the counter
-
+    | Benchmark                | Time    | CPU      | Iterations |                UserCounters |
+    |--------------------------+---------+----------+------------+-----------------------------|
+    | BM_UserCounter/threads:8 | 2248 ns | 10277 ns |      68808 |  Bar=16 Bat=40 Baz=24 Foo=8 |
+    | BM_UserCounter/threads:1 | 9797 ns | 9788 ns  |      71523 | Bar=2 Bat=5 Baz=3 Foo=1024m |
+    | BM_CalculatePiRange/1    | 16 ns   | 16 ns    |   45704255 |                           0 |
+    | BM_CalculatePiRange/8    | 73 ns   | 73 ns    |    9520927 |                     3.28374 |
+    | BM_CalculatePiRange/64   | 609 ns  | 609 ns   |    1140647 |                     3.15746 |
+    |                          |         |          |            |                             |
+                  
+** TODO concurrency
 ** TODO memory map files to feed to functions
    Need to just benchmark this.  Time access for a large file via:
    1. readlines/yield statement

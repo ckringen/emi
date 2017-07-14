@@ -29,7 +29,7 @@ while getopts "h?lmco:" opt; do
         ;;
     m)  pushd $PROF; python main.py 1 $funcs; popd
         ;;
-    c)  pushd $PROF; python -m cProfile main.py; popd
+    c)  pushd $PROF; python main.py 3 myprof.out; popd
 	;;
     o) output_file=$OPTARG
        ;;
