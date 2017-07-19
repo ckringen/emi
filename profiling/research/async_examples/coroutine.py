@@ -3,21 +3,44 @@
 # kind of works!
 
 import time
-import fileinput
-import itertools
-from collections import Counter
 import asyncio
 
+import fileinput
+import itertools
+
+from collections import Counter
+from src import count_skipgrams as skip
+
+
+# --------------------------------------------------- #
+#               asynchronous pipeline                 #
+# --------------------------------------------------- #    
 async def tokenizeAsync( s ):
     tokens = s.split( )
-    await countAsync( tokens )
+    await bigramAsync( tokens )
 
+
+    
+async def bigramAsync( sep ):
+    bigs =  [ ]
+    for k,v in enumerate(sep):
+        if k == len(sep) - 1:
+            break
+        else:
+            bigs.append((v,sep[k+1]))
+    await countAsync( bigs )
+
+
+
+    
 async def readByChunkAsync( fd ):
     f = fileinput.input(files=(fd))
     while True:
         it = list(itertools.islice(f, 100000 ))      # don't really need to tokenize since we're already list-ifying
         if not it:
+            print("we'rebreaking")
             break
+        print("it is ", it[0])
         await tokenizeAsync( it[ 0 ] )
         
 async def countAsync( lst ):
@@ -27,11 +50,13 @@ async def countAsync( lst ):
 
 
 async def mainAsync( ):
-    res = await readByChunkAsync("../samples/large_file.txt")
+    res = await readByChunkAsync("../samples/bigram_count.txt")
     
 
 
-# ------- serial ----- #
+# --------------------------------------------------- #
+#               synchronous pipeline                 #
+# --------------------------------------------------- #    
 def tokenize( s ):
     tokens = s.split( )
     return tokens
@@ -45,6 +70,7 @@ def readByChunk( fd ):
         if not it:
             break
         word = tokenize( it[0] )
+        print("word is ", word)
         words.append(word)
 
     ans = count( words )
@@ -60,6 +86,8 @@ def count( lst ):
 def main( ):
     res = readByChunk("../samples/large_file.txt")
 
+
+    
 if __name__ == "__main__":
 
     # async     # 0.0074920654296875
@@ -70,14 +98,20 @@ if __name__ == "__main__":
     
     print( "elapsed: ", end - begin )
 
+
+    # # needs bigramming
+    # # serial    # 0.010806798934936523
+    # begin = time.time( )
+    # main( )
+    # end = time.time( )
+    # print( "elapsed: ", end - begin )
+
+    # begin = time.time( )    
+    # f = open("../samples/large_file.txt")
+    # skip.main2( f, 0, 100000 ) 
+    # end = time.time( )
     
-    # serial    # 0.010806798934936523
-    begin = time.time( )
-    main( )
-    end = time.time( )
-
-    print( "elapsed: ", end - begin )
-
+    # print( "elapsed: ", end - begin )
 
 
 

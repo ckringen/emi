@@ -1,0 +1,29 @@
+
+#+TITLE: Import Hook
+#+AUTHOR: Chad Kringen
+#+DATE: <2017-07-16 Sun>
+
+Eyy, it worked!
+
+* Overview
+Decorate source code based on user input.
+
+* Objectives
+* Useful Links and Information
+
+--importlib
+https://docs.python.org/3/library/importlib.html#module-importlib
+
+https://stackoverflow.com/questions/39418845/python-3-import-hooks
+
+https://stackoverflow.com/questions/43571737/how-to-implement-an-import-hook-that-can-modify-the-source-code-on-the-fly-using
+
+https://stackoverflow.com/questions/7268643/package-specific-import-hooks-in-python
+
+
+-- arg parsing
+https://docs.python.org/3.6/howto/argparse.html#id1
+
+
+-- introspection
+https://docs.python.org/2/library/inspect.html

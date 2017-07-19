@@ -1,0 +1,3 @@
+http://pyvideo.org/europython-2016/fast-async-code-with-cython-and-asyncio.html
+
+http://pyvideo.org/europython-2016/python-and-async-programming.html

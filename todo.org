@@ -96,7 +96,21 @@ python setup.py install
 *** TODO print each benchmark to its own file, or delineate in some way
 *** DONE get some results
     CLOSED: [2017-07-14 Fri 10:32]
-*** TODO use AST to clean up runProf.sh
+*** DONE clean up runProf.sh
+    CLOSED: [2017-07-19 Wed 18:32]
+    parse command line arguments in python, just use script as top-level, create/move profile reports
+*** DONE build benchmarks class
+    CLOSED: [2017-07-19 Wed 18:34]
+    setUp and tearDown methods, keeps track of functions to profile, gets import-hooked
+*** DONE import hook 
+    CLOSED: [2017-07-19 Wed 18:34]
+    Ultimately decided to avoid AST for now, and create our own __import__ function instead,
+    taking care of source code augmentation using get/setattr
+*** TODO redesign current benchmark class
+    clean up instance-based stuff, possibly move bare functions to
+    separate file so as not to clutter the import space of the class itself
+*** TODO figure out when import hook fails
+    best lead: sub-sub-packages?
 ** TODO concurrency
    Try factoring out the data processing pipeline (chunking, tokenizing, skipgramming, counting) using concurrent tools
 *** DONE async

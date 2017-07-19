@@ -4,7 +4,7 @@ of w1 and w2. A 1-skip bigram is a count of w1 and w3, etc. Read from stdin. """
 
 import sys
 import itertools
-from collections import Counter
+import collections
 
 import fileinput
 
@@ -22,7 +22,7 @@ def ichunks(iterable, size):
 
 def tokenize(line):
 
-    print("tokenizing")
+    #print("tokenizing")
 
     parts = line.strip().split()
     parts.insert(0, BOS) 
@@ -70,7 +70,7 @@ def run(lines, k):
 
     def get_skipgrams(xs): # gets called as many times as there are lines
 
-        print("getting skipgrams")
+        # print("getting skipgrams")
         
         its = itertools.tee(xs, window_size)   # so xs is an iterable, such that it can return an iterator
         for i, iterator in enumerate(its):
@@ -84,7 +84,8 @@ def run(lines, k):
     # print(type(grams))
     
     # All the work happens here:
-    counts = Counter(grams) # goes to optimized C subroutine _count_elements 
+    counts = collections.Counter(grams) # goes to optimized C subroutine _count_elements 
+    #print(counts.items( ))
     return counts.items()
 
     
@@ -142,20 +143,21 @@ def main2(textfile, k, s=None ):
     k = int(k)
 
     if s is None:
-        chunks = [text]
+        chunks = [textfile]
 
     else:
         s = int(s)
-        chunks = ichunks(text, s)
+        chunks = ichunks(textfile, s)
         
     for chunk in chunks:
-        err("Counting skipgrams...")
+        #err("Counting skipgrams...")
         result = run(chunk, k)
 
-        err("Printing %s skipgrams..." % len(result))
+        #err("Printing %s skipgrams..." % len(result))
         if result:
-            for key, count in result:
-                print(" ".join(key), count, sep="\t")
+            print("done")
+            # for key, count in result:
+            #     print(" ".join(key), count, sep="\t")
         else:
             break
 
@@ -194,8 +196,8 @@ def getSkipgrams(xs): # gets called as many times as there are lines
         yield block[0], block[-1]
 
         
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    main(*sys.argv[1:])        
+    # main(*sys.argv[1:])        
 
     # main2(f,0,100000)
