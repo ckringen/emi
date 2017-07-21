@@ -2,6 +2,9 @@
 """ Count skip bigrams. A 0-skip bigram count is a regular bigram count, a count
 of w1 and w2. A 1-skip bigram is a count of w1 and w3, etc. Read from stdin. """
 
+import time
+import os, mmap
+
 import sys
 import itertools
 import collections
@@ -67,21 +70,29 @@ def run(lines, k):
     
     assert k >= 0
     window_size = k + 2
-
+    
     def get_skipgrams(xs): # gets called as many times as there are lines
-
-        # print("getting skipgrams")
         
         its = itertools.tee(xs, window_size)   # so xs is an iterable, such that it can return an iterator
         for i, iterator in enumerate(its):
             for _ in range(i):
                 next(iterator)
+
+        # for i in zip(*its):
+        #     print(i)
+        #     print(i[0], i[-1])
+        # print("outside")
+
         for block in zip(*its):
-            yield block[0], block[-1]
+            # tup = (block[0], block[-1])
+            # ct = collections.Counter(tup)
+            # print(ct)            
+            #print( "blocks: ", block[0], block[-1], type(block[0]), type(block))
+            yield block[0], block[-1]                          # "window_size-skip-bigrams", e.g. 4-skip-2-grams
 
     grams = flat(map(get_skipgrams, map(tokenize, lines)))
 
-    # print(type(grams))
+    #print(type(grams))
     
     # All the work happens here:
     counts = collections.Counter(grams) # goes to optimized C subroutine _count_elements 
@@ -177,8 +188,9 @@ def main(k, s=None ):
         result = run(chunk, k)
         err("Printing %s skipgrams..." % len(result))
         if result:
-            for key, count in result:
-                print(" ".join(key), count, sep="\t")
+            print("done")
+            # for key, count in result:
+            #     print(" ".join(key), count, sep="\t")
         else:
             break
 
@@ -196,8 +208,16 @@ def getSkipgrams(xs): # gets called as many times as there are lines
         yield block[0], block[-1]
 
         
-# if __name__ == '__main__':
+if __name__ == '__main__':
 
-    # main(*sys.argv[1:])        
 
-    # main2(f,0,100000)
+    f = open('../profiling/SampleData/large_file.txt', 'r+b')
+    mmap_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+
+    a = time.time( )
+    #f = open("../profiling/SampleData/large_file.txt", "r")
+    main2(f,2,100000)
+    #main(*sys.argv[1:])        
+    b = time.time( )
+
+    print(b - a )

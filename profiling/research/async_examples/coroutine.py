@@ -1,57 +1,17 @@
 
 # chain data processing steps together via asynchronous coroutines instead of generators on the stack
-# kind of works!
 
+#from memory_profiler import profile
+import os
 import time
 import asyncio
 
+import mmap
 import fileinput
 import itertools
 
-from collections import Counter
+import collections
 from src import count_skipgrams as skip
-
-
-# --------------------------------------------------- #
-#               asynchronous pipeline                 #
-# --------------------------------------------------- #    
-async def tokenizeAsync( s ):
-    tokens = s.split( )
-    await bigramAsync( tokens )
-
-
-    
-async def bigramAsync( sep ):
-    bigs =  [ ]
-    for k,v in enumerate(sep):
-        if k == len(sep) - 1:
-            break
-        else:
-            bigs.append((v,sep[k+1]))
-    await countAsync( bigs )
-
-
-
-    
-async def readByChunkAsync( fd ):
-    f = fileinput.input(files=(fd))
-    while True:
-        it = list(itertools.islice(f, 100000 ))      # don't really need to tokenize since we're already list-ifying
-        if not it:
-            print("we'rebreaking")
-            break
-        print("it is ", it[0])
-        await tokenizeAsync( it[ 0 ] )
-        
-async def countAsync( lst ):
-    c = Counter(lst)
-    print(c)
-    return c
-
-
-async def mainAsync( ):
-    res = await readByChunkAsync("../samples/bigram_count.txt")
-    
 
 
 # --------------------------------------------------- #
@@ -78,7 +38,7 @@ def readByChunk( fd ):
         
 def count( lst ):
     lst = lst[0]
-    c = Counter(lst)
+    c = collections.Counter(lst)
     print(c)
     return c
 
@@ -86,17 +46,102 @@ def count( lst ):
 def main( ):
     res = readByChunk("../samples/large_file.txt")
 
+    
+# --------------------------------------------------- #
+#               asynchronous pipeline                 #
+# --------------------------------------------------- #    
+# need to read up to a space: read buf size, check if space, if not, read from there until space, concatenate strings;
+# a tad unwieldy
+async def mmapAsync( mmap_file ): #, q, overall ):
+    buffer_size = 100000
+    while True:
+        buf = mmap_file.read(buffer_size)                     
+        if not buf:
+            break
+
+        # if you read part way into a word, read some more until you hit a space
+        if buf[-1] != 32:
+            extra = b""
+            while True:
+                extra_byte = mmap_file.read(1)
+                if extra_byte:
+                    if extra_byte[0] != 32:
+                        extra = extra + extra_byte
+                    else:
+                        buf = buf + extra + extra_byte
+                        break
+                else:
+                    break
+
+        await tokenizeAsync( buf ) #, q, overall ) 
+
+        
+async def tokenizeAsync( s ): #, q, overall ):
+    tokens = s.split( )
+    #await pushOnQAsync( tokens ) #, q, overall )
 
     
+async def pushOnQAsync( t ): #, q, overall ):
+    for i in t:
+        q.append(i)    # pushes onto right side
+    #await skipgramAsync( ) #q, overall )
+
+
+# some async magic going on I don't understand here
+# if and else will seemingly get triggered (print stmt) in succession...
+async def skipgramAsync( ): #q, overall ):
+    while True:
+        if len(q) > 2:
+            await countAsync( (q[0], q[2]) ) #, q, overall )
+        else:
+            break
+        
+async def countAsync( tup ):  #, q, overall ):
+    #overall = collections.Counter( tup )
+    q.popleft( )
+    return overall
+        
+#@profile
+async def mainAsync( mmap_file): #, q, overall ):
+    await mmapAsync( mmap_file ) #, q, overall )
+
+overall = collections.Counter( )
+
 if __name__ == "__main__":
 
-    # async     # 0.0074920654296875
-    begin = time.time( )    
+    # mmap file, read chunk, stick in queue, do indexing, pass to counter, pop head, GOTO beginning
+    # as is, need to pass around queue and counter object, unsure if this is causing extra work to be done
+
+    # setup
+    f = open('../../SampleData/large_file.txt', 'r+b')
+    mmap_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+    q = collections.deque( )
+    #overall = collections.Counter( )
+
+    # asyncio needs "gather" or "ensure_futures" to return values from coroutines,
+    # haven't figured out how to make it work yet
+    beg = time.time( )
     loop = asyncio.get_event_loop( )
-    loop.run_until_complete(mainAsync( ))
+    result = loop.run_until_complete(mainAsync( mmap_file ) ) #, q, overall ))
     end = time.time( )
+    print("elapsed: ", end - beg )
+
+
+
+
+
+
+
+
+
     
-    print( "elapsed: ", end - begin )
+    # # async     # 0.0074920654296875
+    # begin = time.time( )    
+    # loop = asyncio.get_event_loop( )
+    # loop.run_until_complete(mainAsync( ))
+    # end = time.time( )
+    
+    # print( "elapsed: ", end - begin )
 
 
     # # needs bigramming

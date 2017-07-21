@@ -8,63 +8,70 @@
 import os
 import fileinput
 import mmap
-#import asyncio
+import asyncio
 
 import itertools
 import collections 
 import src.count_skipgrams as skip
 
+from profilers.TPerf import timer
 
 # --------------------------------------------------- #
 #                   data processing                   #
 # --------------------------------------------------- #    
-#@CPerf
-def bench_ichunks( outfile ):
-    s = "dog's running real fast, I tell you hwat"
-    count_skipgrams.ichunks( s, 3 )
-
-
-#@CPerf
-def bench_tee( outfile ):
-    its = itertools.tee(xs, window_size)
+async def tokenizeAsync( s ):
+    tokens = s.split( )
+    await skipgramAsync( tokens )
+    
+async def bigramAsync( sep ):
+    bigs =  [ ]
+    for k,v in enumerate(sep):
+        if k == len(sep) - 1:
+            break
+        else:
+            bigs.append((v,sep[k+1]))
+    await countAsync( bigs )
+    
+async def skipgramAsync( tokens  ):        
+    its = itertools.tee(tokens, 2)   # so xs is an iterable, such that it can return an iterator
     for i, iterator in enumerate(its):
         for _ in range(i):
             next(iterator)
 
-            
-#@CPerf
-def bench_tokenizeSmallString( outfile ):
-    s = "dog's running real fast, I tell you hwat"
-    count_skipgrams.tokenize( s )
+    for block in zip(*its):
+        await flatMapAsync( block )
+
+async def flatMapAsync( blocks ):
+    grams = flat( blocks )
+    await countAsync( blocks )
     
+async def countAsync( lst ):
+    c = Counter(lst)
+    print(c)
+    return c
 
-#@CPerf
-def bench_islice( outfile ):
-    myiter = itertools.islice(sys.stdin, 100000)
+async def readByChunkAsync( fd ):
+    f = fileinput.input(files=(fd))
+    while True:
+        it = list(itertools.islice(f, 100000 ))      # don't really need to tokenize since we're already list-ifying
+        if not it:
+            print("we'rebreaking")
+            break
+        await tokenizeAsync( it[ 0 ] )
+        
+async def mainAsync( ):
+    res = await readByChunkAsync("../../SampleData/bigram_count.txt")
 
-    
-#@CPerf
-def bench_flat( outfile ):
-    lst = [['a','b'],'c',['d'], [['e','f'],['g'],['h']],'i',[[[[[['j']]]]]]]
-    itertools.chain.from_iterable( lst )
-
-    
-#@CPerf
-def bench_from_iterable( outfile ):
-    grams = flat(map(get_count_skipgrams, map(tokenize, lines)))
-
-    
-#@CPerf
-def bench_get_skipgrams( outfile ):
-    tokens = ['<s>', 'Here', 'Here', 'is', 'is', 'is', 'a', 'a', 'a', 'a', 'is', 'a', 'is', 'a', 'fairly', 'good', 'good', 'fairly', 'example', 'of', 'example', 'of', 'a', 'piece', 'of', 'text', 'of', 'text.', '</s>']
-    gen = map(count_skipgrams.get_skipgrams, tokens)
-
+@timer
+def bench_pipeline_async( ):
+    loop = asyncio.get_event_loop( )
+    loop.run_until_complete(mainAsync( ))
 
 
 # --------------------------------------------------- #
 #            reading data sources                     #
 # --------------------------------------------------- #        
-#@timer
+@timer
 def bench_read_stdin( outfile ):
     ''' read from sys.stdin by iter slice object, possible overhead in converting islice to list; this is done
     because to avoid an infinite loop wherein islice returns an iterator on an empty iterator the same it would on
@@ -86,7 +93,7 @@ def bench_read_stdin( outfile ):
     #         break
 
     
-#@timer
+@timer
 def bench_read_file( outfile ):
     ''' read from file by iter slice object; suffers from same problem as above '''
     f = fileinput.input(files=("samples/large_file.txt"))
@@ -96,7 +103,7 @@ def bench_read_file( outfile ):
             break
     
     
-#@timer
+@timer
 def bench_read_bytes( outfile ):
     ''' read from file by bytes '''
     with open("samples/large_file.txt") as f:
@@ -106,7 +113,7 @@ def bench_read_bytes( outfile ):
                 break
 
     
-#@timer
+@timer
 def bench_read_mmap( mmap_file, outfile ):
     ''' read from memory-mapped file by bytes, assuming islice-size and buffer-size are the same '''
 
