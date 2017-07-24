@@ -19,10 +19,12 @@ def err(x):
     print(x, file=sys.stderr)
     sys.stderr.flush()
 
+@profile
 def ichunks(iterable, size):
     while True:
         yield itertools.islice(iterable, size)        
 
+@profile
 def tokenize(line):
 
     #print("tokenizing")
@@ -66,6 +68,7 @@ def tokenize(line):
 
 flat = itertools.chain.from_iterable
 
+@profile
 def run(lines, k):
     
     assert k >= 0
@@ -147,7 +150,7 @@ def run(lines, k):
 # It takes 15 iterations of s=10000---seems like it should take 14?
 
 
-
+@profile
 def main2(textfile, k, s=None ):
     ''' textfile can be a regular file, or a fileobject, e.g. sys.stdin '''
     err("Beginning skipgram counts")

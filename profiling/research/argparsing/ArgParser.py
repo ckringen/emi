@@ -20,7 +20,7 @@ def parseCommandLine( ):
     tperf.append(args.TPerf)
     cperf.append(args.CPerf)
 
-    res = [tperf,cperf]    # looks like: [[None], ['bench_read_mmap']]
+    res = [tperf,cperf]
     
     return res
 

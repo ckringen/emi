@@ -9,6 +9,31 @@ Eyy, it worked!
 Decorate source code based on user input.
 
 * Objectives
+** DONE introspection
+   CLOSED: [2017-07-24 Mon 12:37]
+   This was the simplest approach, avoiding abstract syntax trees and import hooks, as 
+   well as the import ecosysytem.  Ultimately all we needed to dynamically alter the 
+   class behavior was a set of functions built in to python itself, getattr, setattr,
+   and the inspect library.
+
+** DONE AST
+   CLOSED: [2017-07-24 Mon 12:35]
+   We figured out how to add decorators to functions by parsing code strings into
+   AST objects.  This is documented more in the accompanying AST directory.  Ultimately,
+   we decided to forego this approach.
+** DONE importlib + import system
+   CLOSED: [2017-07-24 Mon 12:34]
+   We used hook2.py to create our own metapathfinder and loader to 
+   get the contents of the benchmark class.  Unfortunately, that gave us 
+   the data just in the form of a filename, which meant that all we could do
+   was read in the file as a string, as opposed to operate on the file as a module.
+   Thus we could go the AST route, but then we could do that anyway by just reading
+   in the file.  So it ultimately sounds like the import system route is too burly
+   or just aimed at different things, for our use.  
+
+   Invocation from a main.py:
+   bench = hook2.install( )
+
 * Useful Links and Information
 
 --importlib
@@ -27,3 +52,7 @@ https://docs.python.org/3.6/howto/argparse.html#id1
 
 -- introspection
 https://docs.python.org/2/library/inspect.html
+
+
+-- import ecosysytem
+https://pymotw.com/2/sys/imports.html

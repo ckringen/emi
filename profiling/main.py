@@ -1,19 +1,15 @@
 
-# import benchmarks and modify select benchmark functions
-# with appropriate performance decorators, e.g. "bench_read_mmap = CPerf(bench_read_mmap)"
+# create benchmark class with set of functions to be profiled
 
-import sys
-import datetime
-
-from ArgParser import parseCommandLine
-import hook        # redefines import func, so either use it last or, figure out how to do "from lib import func" with it
+from ArgParser import parseCommandLine    
+from benchmark_test import benchmark
 
 if __name__ == "__main__":
 
-    args = parseCommandLine( )
+    args = parseCommandLine( )  
     
-    bench = hook.custom_import( "benchmark_test",  args )   # decorates functions in benchmark
+    b = benchmark( args )
 
-    b = bench.benchmark( args[1] )                              # adds functions to benchmark's global state
-    b.runAll( ) 
-    
+    b.runAll( )
+
+
