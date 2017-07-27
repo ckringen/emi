@@ -81,9 +81,6 @@ python setup.py install
     3. [ ] LineProfiler
     4. [X] time
 
-*** TODO base class for the above
-    Should have macro methods and such in it
-
 *** TODO ranges macro
     I think this should work just like a decorator that builds a chunk of data according to some given parameter
     and then calls the to-be-profiled function on it repeatedly for larger and larger data
@@ -93,7 +90,8 @@ python setup.py install
     We ended up just doing main calls from the cProfile getstats( ) function.  This omits subcalls,
     as well as obfuscates caller v. callee.  To that end, we also just wrap the pstats module's print function
 
-*** TODO print each benchmark to its own file, or delineate in some way
+*** DONE print each benchmark to its own file, or delineate in some way
+    CLOSED: [2017-07-24 Mon 14:56]
 *** DONE get some results
     CLOSED: [2017-07-14 Fri 10:32]
 *** DONE clean up runProf.sh
@@ -106,7 +104,8 @@ python setup.py install
     CLOSED: [2017-07-19 Wed 18:34]
     Ultimately decided to avoid AST for now, and create our own __import__ function instead,
     taking care of source code augmentation using get/setattr
-*** TODO redesign current benchmark class
+*** DONE redesign current benchmark class
+    CLOSED: [2017-07-25 Tue 19:55]
     clean up instance-based stuff, possibly move bare functions to
     separate file so as not to clutter the import space of the class itself
 *** DONE figure out when import hook fails
@@ -132,7 +131,9 @@ python setup.py install
    1. readlines/yield statement
    2. binary read
    3. mmapp'ed binary read
-
+** TODO runProf.sh
+*** TODO collect just the "-f" option, pass everything else onto python
+*** TODO put getopts in a function? weirdly doesn't work
 * Directives
 2017-05-10
 
@@ -193,3 +194,13 @@ https://julien.danjou.info/blog/2013/guide-python-static-class-abstract-methods
 
 -- google benchmark
 https://github.com/google/benchmark
+
+
+-- multithreaded python
+https://github.com/sampsyo/cluster-workers
+
+https://stackoverflow.com/questions/25904537/how-do-i-send-data-to-a-running-python-thread
+
+https://stackoverflow.com/questions/14508906/sending-messages-between-class-threads-python
+
+http://wla.berkeley.edu/~cs61a/fa11/lectures/

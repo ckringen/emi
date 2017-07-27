@@ -1,0 +1,15 @@
+
+# must be overhead in creating file object and then reading from it?
+print( bench_read_file( ))        # 0.003299713134765625
+
+# # sys.stdin is treated as a file object, but there might be less overhead
+print( bench_read_stdin( ) )      # 0.0073833465576171875
+
+print( bench_read_bytes( ) )     # 0.0012459754943847656
+        
+# # should be covered in a setup method...
+# # takes time to construct memory map
+f = open('samples/large_file.txt', 'r+b')
+m = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+
+print (bench_read_mmap( m ) )      # 4.76837158203125e-06

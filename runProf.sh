@@ -1,25 +1,70 @@
 #!/bin/bash
 
+# run the appropiate benchmarking fixture with functions (possibly none) to be decorated
 # sample run:
-# ./runProf.sh "-c bench_read_mmap bench_read_binary -t bench_read_stdin"
-# outfiles look like "20170719_bench_read_mmap.tperf"
+# ./runProf.sh -f fixtureAsync -c tokenizeAsync
 
-args=("$@")                     # yields all commandline args, provided they're quoted 
+# POSIX variable : Reset in case getopts has been used previously in the shell.
+OPTIND=1
+benchmark_dir=profiling
+fixture=""
+funcs=""
+output_dir="ProfileReports"
 
-if [ ! -d "ProfileReports" ]; then
-    echo "creating ProfileReports directory"
-    mkdir ProfileReports
+function show_help( ) {
+    echo " run a benchmarking suite; writes profiler reports to ProfileReports/ (default) in root.
+
+options:
+-f         : fixture containing functions to run
+-h         : show the help menu
+-c         : use the cProfile module
+-l         : use the line_profiler module
+-t         : use the time profiler
+-m         : use the memory_profiler module
+-o         : string to use as output directory
+"
+}
+
+# really needs to be revised
+# "-$opt" refers to re-putting a dash infront of the optional argument...
+while getopts "h?f:l:m:t:c:o:" opt; do
+    case "$opt" in
+	h|\?)
+	    show_help
+	    exit 0
+	    ;;
+	l)  funcs="$funcs -$opt $OPTARG"
+	    ;;
+	f)  fixture=$OPTARG
+	    ;;
+	m)  funcs="$funcs -$opt $OPTARG"
+	    ;;
+	c)  funcs="$funcs -$opt $OPTARG"
+	    ;;
+	t)  funcs="$funcs -$opt $OPTARG"
+	    ;;
+	o) output_dir=$OPTARG
+	   ;;
+    esac
+done
+
+shift $((OPTIND-1))
+[ "$1" = "--" ] && shift
+
+# run the benchmark fixture
+if [ ! -d $output_dir ]; then
+    echo "creating $output_dir directory"
+    mkdir $output_dir
 fi
 
-python profiling/main.py $args
+if [ ! -z $fixture ]; then
+    python $benchmark_dir/$fixture.py $funcs
+fi
 
-reports=`ls | grep -P "\.[c|t|l|m]perf"`
+reports=`ls | grep -P "\.[C|T|L|M]Perf"`
 
-# -z checks if a variable is unset or equal to the empty string
 if [ ! -z "$reports" ]; then
-    mv $reports ProfileReports/
+    mv $reports $output_dir/
 fi
-
-
 
 

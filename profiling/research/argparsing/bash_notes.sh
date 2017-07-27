@@ -1,12 +1,10 @@
 #!/bin/bash
 
-PROF=profiling
-funcs=${1:-""}  # pass in a list of functions you'd like to profile, defaults to all
 # A POSIX variable
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
-# Initialize our own variables:
-output_file=""
+fixture=""
+funcs=""
 
 function show_help( ) {
     echo "options:
@@ -15,25 +13,47 @@ function show_help( ) {
 -m         : use the memory_profiler module
 -h         : show the help menu
 -o         : name the output file
+-f         : fixture containing functions to run
 "
-    }
-while getopts "h?lmco:" opt; do
+}
+
+while getopts "h?f:l:m:c:" opt; do
     case "$opt" in
-    h|\?)
-        show_help
-        exit 0
-        ;;
-    l)  pushd $PROF; python main.py 2 $funcs; popd
-        ;;
-    m)  pushd $PROF; python main.py 1 $funcs; popd
-        ;;
-    c)  pushd $PROF; python main.py -c $funcs; popd
-	;;
-    o) output_file=$OPTARG
-       ;;
+	h|\?)
+	    show_help
+	    exit 0
+	    ;;
+	l)  funcs="$funcs $OPTARG"
+	    ;;
+	f)  fix=$OPTARG
+	    ;;
+	m)  funcs="$funcs $OPTARG"
+	    ;;
+	c)  funcs="$funcs $OPTARG"
+	    ;;
+	t)  funcs="$funcs $OPTARG"
+	    ;;
     esac
 done
 
 shift $((OPTIND-1))
 
 [ "$1" = "--" ] && shift
+
+# run the benchmark fixture
+if [ ! -d "ProfileReports" ]; then
+    echo "creating ProfileReports directory"
+    mkdir ProfileReports
+fi
+
+if [ ! -z $fixture ]; then
+    python $fixture $funcs
+fi
+
+reports=`ls | grep -P "\.[C|T|L|M]Perf"`
+
+if [ ! -z "$reports" ]; then
+    mv $reports ProfileReports/
+fi
+
+

@@ -1,5 +1,5 @@
 
-# wrapper around cProfile
+# decorator class, wrapper around cProfile
 # needs to be redesigned
 
 import cProfile
@@ -22,12 +22,16 @@ class CPerf( ):
 
     def __call__( self, *args ):
         ''' instance of class getting called triggers this, i.e. a decorated function '''
+        print("__call__ is getting called ")
         s = cProfile.Profile()
         s.enable( )
-        self.func( )
+        print("stargs is ", *args )
+        self.func( args[1] )
         s.disable( )
 
-        logAsCSV( s )
+        # p = pstats.Stats(s)
+        # p.print_stats()
+        self.printCSVInstance(s,args[1])
 
         
     @classmethod
@@ -39,9 +43,9 @@ class CPerf( ):
             benchmark( )
             stats.disable( )
 
-            cls.printCSV( stats, *args )
+            # cls.printCSV( stats, *args )
             # print( )
-            # cls.printPstats( stats, *args )
+            cls.printPstats( stats, *args )
             
 
     # # --- printing methods --- # # 
@@ -59,7 +63,14 @@ class CPerf( ):
             return ('~', 0, code)    # built-in functions ('~' sorts at the end)
         else:
             return (code.co_filename, code.co_firstlineno, code.co_name)
-        
+
+    def labelInstance(self, code):
+        ''' holdover from the inner workings of cProfile.py '''
+        if isinstance(code, str):
+            return ('~', 0, code)    # built-in functions ('~' sorts at the end)
+        else:
+            return (code.co_filename, code.co_firstlineno, code.co_name)
+
     @classmethod
     def printCSV( cls, stats, fname ):
 
@@ -97,5 +108,41 @@ class CPerf( ):
         numeric = '\t'.join(map(str, [c,tt,frac1,ct,frac2] ))
         numeric += '\t' + func_name[2] + '\n'
         return numeric
-        
 
+    def getLineInstance(self, func, stats): 
+        func_name = self.labelInstance(func.code)
+        nc = func.callcount         # ncalls column of pstats (before '/')
+        cc = nc - func.reccallcount # ncalls column of pstats (after '/')
+        tt = func.inlinetime        # tottime column of pstats
+        ct = func.totaltime         # cumtime column of pstats
+        
+        c = str(nc)
+
+        if nc != cc:
+            c = c + '/' + str(cc)
+        if nc == 0:
+            frac1 = 0
+        else:
+            frac1 = tt/nc
+        if cc == 0:
+            frac2 = 0
+        else:
+            frac2 = ct/cc
+
+        numeric = '\t'.join(map(str, [c,tt,frac1,ct,frac2] ))
+        numeric += '\t' + func_name[2] + '\n'
+        return numeric
+
+
+
+    def printCSVInstance( self, stats, fname ):
+
+        fd = open(fname,"w")        
+        header = '\t'.join('ncalls,tottime,percall,cumtime,percall\tfilename:lineno(function)\n'.split(','))
+        
+        flist = stats.getstats( )
+        if flist:
+            fd.write(header)
+            for func in flist:
+                l = self.getLineInstance(func, flist)
+                fd.write( l )
