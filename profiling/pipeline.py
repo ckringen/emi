@@ -206,31 +206,30 @@ if __name__ == '__main__':
 
     import time
     import collections
-    
-    # def produce():
-    #     for i in range(5):
-    #         print( 'generating', i)
-    #         time.sleep(1)
-    #         yield i
-
-    # def work():
-    #     num = yield
-    #     while True:
-    #         print( 'processing', num)
-    #         time.sleep(2)
-    #         num = yield num*2
-
-    # def consume():
-    #     while True:
-    #         num = yield
-    #         time.sleep(1)
-    #         print( 'received', num)
-
 
     a = '''this is a this is bytes bytes file file file to test bigram bigram counting.
-        for what it's worth worth here is some more tasty data.'''.split( )
+    for what it's worth worth here is some more tasty data.'''.split( )
     c = collections.Counter( )
     window_size = 2
+
+    def produce():
+        for i in range(5):
+            print( 'generating', i)
+            time.sleep(1)
+            yield i
+
+    def work():
+        num = yield
+        while True:
+            print( 'processing', num)
+            time.sleep(2)
+            num = yield num*2
+
+    def consume():
+        while True:
+            num = yield
+            time.sleep(1)
+            print( 'received', num)
 
     def tokenize( ):
         while True:

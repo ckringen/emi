@@ -1,5 +1,0 @@
-ncalls	tottime	percall	cumtime	percall	filename:lineno(function)
-1	0.0	0.0	0.0	0.0	<method 'disable' of '_lsprof.Profiler' objects>
-1	1e-06	1e-06	1e-06	1e-06	<method 'seek' of 'mmap.mmap' objects>
-1	4e-06	4e-06	4.9999999999999996e-06	4.9999999999999996e-06	bench_read_mmap
-1	9e-06	9e-06	9e-06	9e-06	<built-in method builtins.print>

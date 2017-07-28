@@ -78,13 +78,13 @@ async def mmapAsync( mmap_file ): #, q, overall ):
         
 async def tokenizeAsync( s ): #, q, overall ):
     tokens = s.split( )
-    #await pushOnQAsync( tokens ) #, q, overall )
+    await pushOnQAsync( tokens ) #, q, overall )
 
     
 async def pushOnQAsync( t ): #, q, overall ):
     for i in t:
         q.append(i)    # pushes onto right side
-    #await skipgramAsync( ) #q, overall )
+    await skipgramAsync( ) #q, overall )
 
 
 # some async magic going on I don't understand here

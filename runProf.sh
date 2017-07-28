@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # run the appropiate benchmarking fixture with functions (possibly none) to be decorated
-# sample run:
-# ./runProf.sh -f fixtureAsync -c tokenizeAsync
 
 # POSIX variable : Reset in case getopts has been used previously in the shell.
 OPTIND=1
@@ -12,16 +10,23 @@ funcs=""
 output_dir="ProfileReports"
 
 function show_help( ) {
-    echo " run a benchmarking suite; writes profiler reports to ProfileReports/ (default) in root.
+    echo "
+Run a benchmarking suite. Writes profiler reports to ProfileReports/ (default) in root. 
+
+Sample run:
+          
+./runProf.sh -f fixtureAsync \"-c tokenizeAsync countAsync -t bigramAsync\"
+
+Make sure you're putting all flags except -f in quotes.
 
 options:
--f         : fixture containing functions to run
+-f         : file containing functions to run, should be a class inheriting from the benchFixture class
 -h         : show the help menu
 -c         : use the cProfile module
 -l         : use the line_profiler module
--t         : use the time profiler
+-t         : use the time profiler module
 -m         : use the memory_profiler module
--o         : string to use as output directory
+-o         : string to use as output directory name
 "
 }
 
@@ -56,6 +61,7 @@ if [ ! -d $output_dir ]; then
     echo "creating $output_dir directory"
     mkdir $output_dir
 fi
+
 
 if [ ! -z $fixture ]; then
     python $benchmark_dir/$fixture.py $funcs

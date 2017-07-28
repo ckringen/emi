@@ -3,8 +3,7 @@ import os
 import fileinput
 import mmap
 
-import benchmark
-from profilers.TPerf import timer
+import benchmarking
 
 
 class benchDataSources( benchmark.BenchFixture ):

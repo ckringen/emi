@@ -30,7 +30,7 @@ class benchAsync( benchmarking.BenchFixture ):
     
     async def skipgramAsync( tokens  ):        
         its = itertools.tee(tokens, 2)   # so xs is an iterable, such that it can return an iterator
-        for i,its iterator in enumerate(its):
+        for i, iterator in enumerate(its):
             for _ in range(i):
                 next(iterator)
 
