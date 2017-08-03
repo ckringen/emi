@@ -1,6 +1,6 @@
 
 # kind of pointless at the moment.  Would like to add some features though,
-# like ranges macro, maybe just boilerplate organizational code
+# ranges macro, maybe just boilerplate organizational code
 
 
 class BenchFixture( ):

@@ -2,9 +2,8 @@
 
 # run the appropiate benchmarking fixture with functions (possibly none) to be decorated
 
-# POSIX variable : Reset in case getopts has been used previously in the shell.
-OPTIND=1
-benchmark_dir=profiling
+OPTIND=1           # POSIX variable : Reset in case getopts has been used previously in the shell.
+benchmark_dir="profiling/fixtures"
 fixture=""
 funcs=""
 output_dir="ProfileReports"
@@ -17,7 +16,7 @@ Sample run:
           
 ./runProf.sh -f fixtureAsync \"-c tokenizeAsync countAsync -t bigramAsync\"
 
-Make sure you're putting all flags except -f in quotes.
+Make sure you're putting all flags+args except -f in quotes.
 
 options:
 -f         : file containing functions to run, should be a class inheriting from the benchFixture class
@@ -62,12 +61,12 @@ if [ ! -d $output_dir ]; then
     mkdir $output_dir
 fi
 
-
 if [ ! -z $fixture ]; then
     python $benchmark_dir/$fixture.py $funcs
 fi
 
-reports=`ls | grep -P "\.[C|T|L|M]Perf"`
+# grab the output files 
+reports=`ls | grep -P "\.[C|T|L|M|D]Perf"`
 
 if [ ! -z "$reports" ]; then
     mv $reports $output_dir/

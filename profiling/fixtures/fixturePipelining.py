@@ -63,3 +63,42 @@ if __name__ == "__main__":
 
     print("inside main of fixture pipeline")
     benchmarking.Benchmark( )
+
+
+        def skipgramProcess( ):   
+        while True:
+            text = (yield)
+            text = text.split( )
+            try:
+                executor = concurrent.futures.ProcessPoolExecutor(max_workers=10)
+                copies = itertools.repeat(text,len(text))
+                skips = range(0,len(text),window_size)
+                
+                for idx, bigram in zip(skips, executor.map(skip, skips, copies)):
+                    #print('%d idx has as skips: %s' % (idx, bigram))
+                    deq.append( bigram )
+                    
+            except IndexError as e:
+                pass #print(e)
+
+
+            @coroutine
+def skipgramThread( ):   
+    while True:
+        text = (yield)
+        text = text.split( )
+        try:
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=10)
+            copies = itertools.repeat(text,len(text))
+            skips = range(0,len(text),window_size)
+
+            for idx, bigram in zip(skips, executor.map(skip, skips, copies)):
+                #print('%d idx has as skips: %s' % (idx, bigram))
+                deq.append( bigram )
+            
+        except IndexError as e:
+            pass #print(e)
+    def skip( idx, text ):
+        offset = 2
+        bigram = [(text[idx], text[idx+offset])]
+        return bigram

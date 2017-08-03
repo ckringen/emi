@@ -21,7 +21,7 @@ class benchDataSources( benchmark.BenchFixture ):
         
     def bench_read_stdin( outfile ):
         ''' read from sys.stdin by iter slice object, possible overhead in converting islice to list; this is done
-        because to avoid an infinite loop wherein islice returns an iterator on an empty iterator the same it would on
+        to avoid an infinite loop wherein islice returns an iterator on an empty iterator the same it would on
         a nonempty iterator; https://stackoverflow.com/questions/44986908/yielding-islice-from-reading-file'''
         f = sys.stdin
         sentinel = object( )

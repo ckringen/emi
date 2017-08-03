@@ -1,3 +1,4 @@
+
 #+TITLE: Profile NLP Algorithms
 #+AUTHOR: Chad Kringen
 #+DATE:<2017-06-27 Tue>
@@ -114,16 +115,19 @@ python setup.py install
     answer: not actually sure.  just going to avoid overriding a builtin,
             and use basic introspection
 
-** TODO concurrency
+** DONE concurrency
+   CLOSED: [2017-08-03 Thu 13:24]
    Try factoring out the data processing pipeline (chunking, tokenizing, skipgramming, counting) using concurrent tools
 *** DONE async
     CLOSED: [2017-07-14 Fri 10:35]
     Use the asyncio library for lots of small tasks that don't take too long to complete
 
-*** TODO processes
+*** DONE processes
+    CLOSED: [2017-08-03 Thu 13:24]
     The major tool here is the multiprocessing (multithreading) module from the stdlib, I think.  There must be 
     some interesting interaction between multiprocessing and the slurm scheduler, right?
-*** TODO concurrent.futures
+*** DONE concurrent.futures
+    CLOSED: [2017-08-03 Thu 13:24]
     see what threads can do for us
 ** DONE memory map files to feed to functions
    CLOSED: [2017-07-14 Fri 10:35]
@@ -131,9 +135,40 @@ python setup.py install
    1. readlines/yield statement
    2. binary read
    3. mmapp'ed binary read
-** TODO runProf.sh
-*** TODO collect just the "-f" option, pass everything else onto python
-*** TODO put getopts in a function? weirdly doesn't work
+** DONE runProf.sh
+   CLOSED: [2017-08-03 Thu 13:24]
+*** DONE collect just the "-f" option, pass everything else onto python
+    CLOSED: [2017-08-03 Thu 13:24]
+*** DONE put getopts in a function? weirdly doesn't work
+    CLOSED: [2017-08-03 Thu 13:24]
+** TODO fixtures for each style of skipgramming   
+   Run all the below from runProf.sh.
+   1. [ ] async
+   2. [ ] threads
+   3. [ ] processes
+   4. [ ] generators
+   5. [ ] data sources
+
+** TODO cython versions of the skipgramming pipelines
+** TODO theory for investigating performance
+   We have a number of tools to investigate performance,
+  
+   1. line_profiler
+   2. memory_profiler
+   3. cProfile
+   4. disassembler
+   5. traceback
+   6. timer
+
+   but not a lot of theory to really use the tools.  For instance, how do we 
+   read the bytecode output, what do we look for?  Similarly, how do we know
+   what's going on in the actual running of the code?
+
+   Essentially all we have is a relativistic approach:
+
+       *compare two pieces of code side by side*
+
+
 * Directives
 2017-05-10
 

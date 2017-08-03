@@ -1,11 +1,12 @@
 
-# decorator cass, wrapper around simple timing via the time module
+# decorator cass, wrapper around simple timing via the 3rd party line-profiler
 
-import time
+import dis
 
-class TPerf( ):
-    ''' global state object to hold all benchmark functions, plus some utility
-        methods for running and formatting according to the cProfiler 
+class DPerf( ):
+    ''' 
+    global state object to hold all benchmark functions, plus some utility
+    methods for running and formatting according to line by line profiling
     '''    
     
     def __init__(self, function, out="logging.out"):
@@ -14,17 +15,13 @@ class TPerf( ):
 
     def __call__( self, *args ):
         ''' instance of class getting called triggers this, i.e. a decorated function '''
-      
-        print("running self.func ", self.func)
-        a = time.time( )
-        self.func( self )
-        b = time.time ( )
-        elapsed =  b - a 
+        breakdown = dis.dis(self.func)        
         self.printCSVInstance(elapsed, args[0])
 
     def printCSVInstance( self, output, outfile ):
         with open( outfile, "w" ) as f:
-            output = "elapsed time was: " + str(output)
+            # output = "elapsed time was: " + str(output)
             f.write(output)
 
             
+

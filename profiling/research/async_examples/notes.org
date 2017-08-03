@@ -1,3 +1,44 @@
-http://pyvideo.org/europython-2016/fast-async-code-with-cython-and-asyncio.html
 
-http://pyvideo.org/europython-2016/python-and-async-programming.html
+* Objectives
+** DONE multiprocessing with queues
+   CLOSED: [2017-08-02 Wed 17:03]
+
+** TODO multiprocessing with pipes
+
+** TODO async
+
+** TODO cython
+
+** TODO understand how to find blocking function calls
+
+* Useful Links
+** http://pyvideo.org/europython-2016/fast-async-code-with-cython-and-asyncio.html
+
+** http://pyvideo.org/europython-2016/python-and-async-programming.html
+
+** https://www.reddit.com/r/Python/comments/6pttop/how_to_detect_multiprocessingpipe_is_full/
+
+** http://code.activestate.com/recipes/577223-blocking-polling-pipes-queues-in-multiprocessing-a/
+
+** https://www.ibm.com/developerworks/aix/library/au-multiprocessing/index.html
+
+** https://stackoverflow.com/questions/8277715/multiprocessing-in-a-pipeline-done-right
+
+** https://stackoverflow.com/questions/13980160/multiprocessing-producer-consumer-design?rq=1
+
+** https://stackoverflow.com/questions/17305173/how-to-set-up-a-pipeline-using-queues-in-multiprocessing
+
+* Observations
+  So, essentially, we spend most of our time having all our workers append to the queue,
+  which blocks the other threads, I think.  
+
+  Processes are costly to create so we don't want to use them just for simple labor.  And
+  threads force constant blocking of the main interpreter (I think) due to the GIL 
+  (I think).  
+
+  There's an outside chance that the performance gains of multiprocessing the processing
+  outweigh the costs of constantly calling the counter method.  But I'm not sure how
+  to rig that up.  Something like calling "count" within each process and then adding
+  them together at the end.  I doubt it though.
+
+  Best solution is either coroutines or asyncio.  

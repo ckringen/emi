@@ -1,20 +1,24 @@
 
 # general base class for logging benchmarking fixtures
 
+# TODO:
+# 1. consider other ways to call benchmarking functions, e.g. by registering them directly as opposed
+#    to their names
+# 2. clean up decorating and registering functions: former is getting called twice
+
 import argparse
 from inspect import getmembers, ismethod, isclass
-
-from .benchmarkFixture import BenchFixture
-from .CPerf import CPerf
-from .TPerf import TPerf
 
 import datetime
 dt = datetime.datetime.now().strftime("%Y%m%d")
 
+from .benchmarkFixture import BenchFixture
+from ..profilers.CPerf import CPerf
+from ..profilers.TPerf import TPerf
+
 
 class Benchmark( ):
     def __init__( self, module="__main__" ):
-        print("bench init")
         self.fixture = None
         self.global_funcs = { }
         self.module = module
@@ -26,7 +30,10 @@ class Benchmark( ):
         parser = argparse.ArgumentParser( )        
         parser.add_argument("-t", "--TPerf", help="use the timer function from the TPerf module", nargs="+" )
         parser.add_argument("-c", "--CPerf", help="use the cProfiler from the CPerf module", nargs="+" )
-        parser.add_argument("-i", "--identifier", help="string to identify runs of a bench fixture, used to construct the outfile names", nargs="+" )
+        parser.add_argument("-l", "--LPerf", help="use the line_profiler function from the LPerf module", nargs="+" )
+        parser.add_argument("-m", "--MPerf", help="use the memor_profiler function from the MPerf module", nargs="+" )
+        parser.add_argument("-d", "--DPerf", help="use the disassembler function from the dis module", nargs="+" )
+        parser.add_argument("-i", "--identifier", help="string to identify runs of a bench fixture, used to construct the outfile names" )
         args = parser.parse_args( )
         
         if args.CPerf is None and args.TPerf is None:
@@ -63,7 +70,7 @@ class Benchmark( ):
             self.add_profiler( self.args.TPerf, TPerf  )
 
     # either you provided an explicit list for each profiler, or you provided nothing, which
-    # defaults to running all functions (assumption: you decorated the functions in the fixture)
+    # default runs all functions (assumption: you decorated the functions in the fixture yourself)
     def register_functions( self ):
         if self.args is None:
             for name, val in getmembers(self.fixture):
@@ -75,7 +82,6 @@ class Benchmark( ):
     def loader( self ):
         # import the fixture (as opposed to subclassing it) so we can access functions to decorate
         if isinstance(self.module, str):
-            print( "importing fixture " )
             self.mod = __import__(self.module)
 
         # create fixture instance so we can run the setup method
@@ -91,7 +97,6 @@ class Benchmark( ):
             if name in self.global_funcs:
                 func = getattr(self.fixture,name)
                 outname = self.global_funcs[name]
-                print("outname is: ", outname)
                 func( outname )
                 
     def main( self ):

@@ -1,18 +1,23 @@
-# copipe.py
-#
-# A simple example showing how to hook up a pipeline with
-# coroutines.   To run this, you will need a log file.
-# Run the program logsim.py in the background to get a data
-# source.
 
 import time
 import collections
+import multiprocessing
+import concurrent.futures
+import itertools
+import dis
+import pdb
+
+def playing(func):
+    def thedozens(*args,**kwargs):
+        print(dis.dis(*args))
+        return
+    return thedozens
 
 
+#@profile
 def coroutine(func):
     def start(*args,**kwargs):
         cr = func(*args,**kwargs)
-        #print("calling next")
         next( cr )
         return cr
     return start
@@ -20,32 +25,77 @@ def coroutine(func):
     
 # if buffer size is 100000, time taken is 1.6 sec
 # but if it's 8 or 10, time taken drops to .47; possibly due to average word size??
+#@profile
 def read_mmap( f, target ):
-    buffer_size = 8
+    pdb.set_trace( )
+    buffer_size = 10
     while True:
         buf = f.read(buffer_size)
         if not buf:
             print("breaking")
             break
 
-        # this either has a bug, or is just super slow
-        # # if you read part way into a word, read some more until you hit a space
-        # if buf[-1] != 32:
-        #     extra = b""
-        #     while True:
-        #         extra_byte = f.read(1)
-        #         if extra_byte:
-        #             if extra_byte[0] != 32:
-        #                 extra = extra + str.encode(extra_byte)
-        #             else:
-        #                 buf = buf + extra + str.encode(extra_byte)
-        #                 break
-        #         else:
-        #             break
+        #this either has a bug, or is just super slow
+        # if you read part way into a word, read some more until you hit a space
+        if buf[-1] != 32:
+            extra = b""
+            while True:
+                extra_byte = f.read(1)
+                if extra_byte:
+                    if extra_byte[0] != 32:
+                        extra = extra + str.encode(extra_byte)
+                    else:
+                        buf = buf + extra + str.encode(extra_byte)
+                        break
+                else:
+                    break
 
         target.send( buf )
         
 
+def skip( idx, text ):
+    offset = 2
+    bigram = [(text[idx], text[idx+offset])]
+    return bigram
+
+
+@coroutine
+def skipgramProcess( ):   
+    while True:
+        text = (yield)
+        text = text.split( )
+        try:
+            executor = concurrent.futures.ProcessPoolExecutor(max_workers=10)
+            copies = itertools.repeat(text,len(text))
+            skips = range(0,len(text),window_size)
+
+            for idx, bigram in zip(skips, executor.map(skip, skips, copies)):
+                #print('%d idx has as skips: %s' % (idx, bigram))
+                deq.append( bigram )
+            
+        except IndexError as e:
+            pass #print(e)
+
+        
+@coroutine
+def skipgramThread( ):   
+    while True:
+        text = (yield)
+        text = text.split( )
+        try:
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=10)
+            copies = itertools.repeat(text,len(text))
+            skips = range(0,len(text),window_size)
+
+            for idx, bigram in zip(skips, executor.map(skip, skips, copies)):
+                #print('%d idx has as skips: %s' % (idx, bigram))
+                deq.append( bigram )
+            
+        except IndexError as e:
+            pass #print(e)
+
+    
+        
 @coroutine
 def tokenize( ): #target ):
     while True:
@@ -83,16 +133,21 @@ def tokenize( ): #target ):
 #             target.send( deq )
 #             deq.popleft( )
 
-         
-# @coroutine
-# def skipgram(pattern,target):
-#     while True:
-#         line = (yield)           # Receive a line
-#         for k,v in enumerate(line):
-#             if k == len(line):
-#                 break
-#             else:
-#                 target.send((line[k],line[k+window_size]))    # Send to next stage
+
+
+@coroutine
+#@profile
+def skipgram():#,target):
+    while True:
+        line = (yield)           # Receive a line
+        line = line.split()
+        try:
+            while line:
+                deq.append([(line[0],line[window_size])])
+                del line[0]
+        except IndexError as e:
+            pass
+
 
             
 # A sink.  A coroutine that receives data
@@ -105,22 +160,17 @@ def count():
 
 if __name__ == '__main__':
 
-    a = '''this is a this is bytes bytes file file file to test bigram bigram counting.
-    for what it's worth worth here is some more tasty data.'''
-
-    deq = collections.deque( )
-
-    window_size = 2
-
-
-    f = open("../../SampleData/large_file.txt", "r")
+    # deq = collections.deque( )
+    # window_size = 2
+    # f = open("../../SampleData/large_file.txt", "r")
     
-    read_mmap( f,
-               tokenize( ) )
-                   #count( ) ) )
+    # print(read_mmap( f,
+    #            skipgram( ) ) )
+    #                #count( ) ) )
 
-    #print(c)
-    import itertools
-    grams = itertools.chain.from_iterable( deq )
-    c = collections.Counter( grams )
-    #print(c)
+    # #print(c)
+    # grams = itertools.chain.from_iterable( deq )
+    # c = collections.Counter( grams )
+    # #print(c)
+
+    print(dis.dis(read_mmap))

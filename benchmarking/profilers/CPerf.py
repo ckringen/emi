@@ -1,6 +1,9 @@
 
 # decorator class, wrapper around cProfile
 
+# TODO:
+# clean up printing machinery
+
 import cProfile
 import pstats
 
@@ -15,7 +18,7 @@ class CPerf( ):
 
 
     def __call__( self, *args ):
-        ''' instance of class getting called triggers this, i.e. a decorated function '''
+        ''' triggered by instance of class getting called, i.e. a decorated function '''
         s = cProfile.Profile()
         s.enable( )
 
@@ -27,7 +30,6 @@ class CPerf( ):
 
         # p = pstats.Stats(s)
         # p.print_stats()
-        self.printCSVInstance(s,args[0])
 
         
     def labelInstance(self, code):
