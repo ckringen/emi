@@ -1,4 +1,8 @@
 
+# chain generators together to get asynchronous (?) coroutines
+# also, try to just 'parallelize' the skipgramming part with
+# both threads and processes via the concurrent.futures module
+
 import collections
 import itertools
 
@@ -23,13 +27,12 @@ class benchGenerator( benchmarking.BenchFixture ):
             
     def setUp( self ):
         self.deq = collections.deque( )
-        self.window_size = 2
         self.f = open("/home/aik/PersonalProjects/Building46/emi/profiling/SampleData/large_file.txt", "r")
     
     def tearDown( self ):
         pass
     
-    def read_mmap( self, target ):
+    def readFile( self, target ):
 
         print("file is: ", self.f)
 
@@ -55,7 +58,9 @@ class benchGenerator( benchmarking.BenchFixture ):
             #             break
 
             target.send( buf )
-                
+
+    
+    @profile
     @coroutine
     def tokenize( self ): #target ):
         while True:
@@ -69,7 +74,8 @@ class benchGenerator( benchmarking.BenchFixture ):
                     del text[0]               
             except IndexError as e:
                 pass
-        
+
+            
     @coroutine
     def loadOnQueue( self, target ):
         while True:
@@ -81,6 +87,7 @@ class benchGenerator( benchmarking.BenchFixture ):
                 target.send( deq )
                 deq.popleft( )
 
+                
     @coroutine
     def skipgram(self):#,target):
         while True:
@@ -92,16 +99,59 @@ class benchGenerator( benchmarking.BenchFixture ):
                     del line[0]
             except IndexError as e:
                 pass
+
             
+    @coroutine
+    def skipgramProcess( ):   
+        while True:
+            text = (yield)
+            text = text.split( )
+            try:
+                executor = concurrent.futures.ProcessPoolExecutor(max_workers=10)
+                copies = itertools.repeat(text,len(text))
+                skips = range(0,len(text),window_size)
+                
+                for idx, bigram in zip(skips, executor.map(skip, skips, copies)):
+                    #print('%d idx has as skips: %s' % (idx, bigram))
+                    deq.append( bigram )
+                    
+            except IndexError as e:
+                pass #print(e)
+
+            
+    @coroutine
+    def skipgramThread( ):   
+        while True:
+            text = (yield)
+            text = text.split( )
+            try:
+                executor = concurrent.futures.ThreadPoolExecutor(max_workers=10)
+                copies = itertools.repeat(text,len(text))
+                skips = range(0,len(text),window_size)
+                
+                for idx, bigram in zip(skips, executor.map(skip, skips, copies)):
+                    #print('%d idx has as skips: %s' % (idx, bigram))
+                    deq.append( bigram )
+                    
+            except IndexError as e:
+                pass #print(e)
+
+            
+    def skip( idx, text ):
+        offset = 2
+        bigram = [(text[idx], text[idx+offset])]
+        return bigram
+
+    
     @coroutine
     def count( self ):
         while True:
             line = (yield)
             c.update( line )
 
-
+    @profile
     def runPipe( self, outfilename ):
-        self.read_mmap(
+        self.readFile(
                    self.skipgram( ) )
         
         grams = itertools.chain.from_iterable( self.deq )
@@ -109,4 +159,7 @@ class benchGenerator( benchmarking.BenchFixture ):
 
         
 if __name__ == '__main__':
-    benchmarking.Benchmark( )
+    #benchmarking.Benchmark( )
+
+    bg = benchGenerator( )
+    bg.runPipe( "myfile.out")

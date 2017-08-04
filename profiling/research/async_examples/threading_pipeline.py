@@ -1,4 +1,4 @@
->"""Simple but robust implementation of generator/coroutine-based
+"""Simple but robust implementation of generator/coroutine-based
 pipelines in Python. The pipelines may be run either sequentially
 (single-threaded) or in parallel (one thread per pipeline stage).
 

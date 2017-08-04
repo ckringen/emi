@@ -7,10 +7,15 @@ import benchmarking
 
 class benchAsync( benchmarking.BenchFixture ):
     def __init__( self ):
-        pass
-    
-    def setUp( ):
-        pass
+        self.f = ""
+        self.deq = None
+        self.window_size = 2
+        self.setUp( )
+            
+    def setUp( self ):
+        f = open('profiling/SampleData/large_file.txt', 'r+b')
+        self.f = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+        self.deq = collections.deque( )
     
     def tearDown( ):
         pass
@@ -41,99 +46,62 @@ class benchAsync( benchmarking.BenchFixture ):
         grams = flat( blocks )
         await countAsync( blocks )
     
-    async def countAsync( lst ):
+    async def countAsync1( lst ):
         c = collections.Counter(lst)
         print(c)
         return c
-
-    async def readByChunkAsync( fd ):
-        f = fileinput.input(files=(fd))
-        while True:
-            it = list(itertools.islice(f, 100000 ))      # don't really need to tokenize since we're already list-ifying
-            if not it:
-                print("we'rebreaking")
-                break
-            await tokenizeAsync( it[ 0 ] )
         
-    async def mainAsync( ):
-        res = await readByChunkAsync("../../SampleData/bigram_count.txt")
+    async def mmapAsync( mmap_file ): #, q, overall ):
+        buffer_size = 100000
+        while True:
+            buf = mmap_file.read(buffer_size)                     
+            if not buf:
+                break
 
-    #@timer
-    def bench_pipeline_async( ):
-        loop = asyncio.get_event_loop( )
-        loop.run_until_complete(mainAsync( ))
+            # # if you read part way into a word, read some more until you hit a space
+            # if buf[-1] != 32:
+            #     extra = b""
+            #     while True:
+            #         extra_byte = mmap_file.read(1)
+            #         if extra_byte:
+            #             if extra_byte[0] != 32:
+            #                 extra = extra + extra_byte
+            #             else:
+            #                 buf = buf + extra + extra_byte
+            #                 break
+            #         else:
+            #             break
 
-
-
-
-
-async def mmapAsync( mmap_file ): #, q, overall ):
-    buffer_size = 100000
-    while True:
-        buf = mmap_file.read(buffer_size)                     
-        if not buf:
-            break
-
-        # # if you read part way into a word, read some more until you hit a space
-        # if buf[-1] != 32:
-        #     extra = b""
-        #     while True:
-        #         extra_byte = mmap_file.read(1)
-        #         if extra_byte:
-        #             if extra_byte[0] != 32:
-        #                 extra = extra + extra_byte
-        #             else:
-        #                 buf = buf + extra + extra_byte
-        #                 break
-        #         else:
-        #             break
-
-        async def tokenizeAsync( s ): #, q, overall ):
-    tokens = s.split( )
-    await pushOnQAsync( tokens ) #, q, overall )
+    async def tokenizeAsync2( s ): 
+        tokens = s.split( )
+        await pushOnQAsync( tokens ) 
 
     
-async def pushOnQAsync( t ): #, q, overall ):
-    for i in t:
-        q.append(i)    # pushes onto right side
-    await skipgramAsync( ) #q, overall )
+    async def pushOnQAsync( t ): 
+        for i in t:
+            q.append(i) 
+            await skipgramAsync( )
 
 
-# some async magic going on I don't understand here
-# if and else will seemingly get triggered (print stmt) in succession...
-async def skipgramAsync( ): #q, overall ):
-    while True:
-        if len(q) > 2:
-            await countAsync( (q[0], q[2]) ) #, q, overall )
-        else:
-            break
+    async def skipgramAsync2( ):
+        while True:
+            if len(q) > 2:
+                await countAsync( (q[0], q[2]) )
+            else:
+                break
         
-async def countAsync( tup ):  #, q, overall ):
-    #overall = collections.Counter( tup )
-    q.popleft( )
-    return overall
+    async def countAsync2( tup ):
+        q.popleft( )
+        return overall
         
-#@profile
-async def mainAsync( mmap_file): #, q, overall ):
-    await mmapAsync( mmap_file ) #, q, overall )
+    async def mainAsync( mmap_file): 
+        await mmapAsync( mmap_file ) 
 
-overall = collections.Counter( )
 
-    # setup
-    f = open('../../SampleData/large_file.txt', 'r+b')
-    mmap_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-    q = collections.deque( )
-    #overall = collections.Counter( )
+    def runPipe( self ):
+        loop = asyncio.get_event_loop( )
+        result = loop.run_until_complete(mainAsync( self.f ) )
+            
 
-    # asyncio needs "gather" or "ensure_futures" to return values from coroutines,
-    # haven't figured out how to make it work yet
-    beg = time.time( )
-    loop = asyncio.get_event_loop( )
-    result = loop.run_until_complete(mainAsync( mmap_file ) ) #, q, overall ))
-    end = time.time( )
-    print("elapsed: ", end - beg )
-
-        
-        
 if __name__ == "__main__":
     benchmarking.Benchmark( )

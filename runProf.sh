@@ -25,13 +25,14 @@ options:
 -l         : use the line_profiler module
 -t         : use the time profiler module
 -m         : use the memory_profiler module
+-d         : use the disassembler module
 -o         : string to use as output directory name
 "
 }
 
 # really needs to be revised
 # "-$opt" refers to re-putting a dash infront of the optional argument...
-while getopts "h?f:l:m:t:c:o:" opt; do
+while getopts "h?f:l:m:t:d:c:o:" opt; do
     case "$opt" in
 	h|\?)
 	    show_help
@@ -42,6 +43,8 @@ while getopts "h?f:l:m:t:c:o:" opt; do
 	f)  fixture=$OPTARG
 	    ;;
 	m)  funcs="$funcs -$opt $OPTARG"
+	    ;;
+	d)  funcs="$funcs -$opt $OPTARG"
 	    ;;
 	c)  funcs="$funcs -$opt $OPTARG"
 	    ;;

@@ -1,12 +1,12 @@
 
-# decorator cass, wrapper around simple timing via the 3rd party line-profiler
+# decorator cass, wrapper around stdlib disassembler
 
 import dis
 
 class DPerf( ):
     ''' 
     global state object to hold all benchmark functions, plus some utility
-    methods for running and formatting according to line by line profiling
+    methods for running and formatting according to bytecode
     '''    
     
     def __init__(self, function, out="logging.out"):
@@ -15,13 +15,11 @@ class DPerf( ):
 
     def __call__( self, *args ):
         ''' instance of class getting called triggers this, i.e. a decorated function '''
-        breakdown = dis.dis(self.func)        
-        self.printCSVInstance(elapsed, args[0])
+        outf = self.getFilestream( *args )
+        dis.dis(self.func,file=outf)
 
-    def printCSVInstance( self, output, outfile ):
-        with open( outfile, "w" ) as f:
-            # output = "elapsed time was: " + str(output)
-            f.write(output)
-
+    def getFilestream( self, output ):
+        f = open(output, "w")
+        return f
             
 

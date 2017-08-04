@@ -1,6 +1,6 @@
 
 # general profiling class that CPerf, MPerf and LPerf should inherit from
-# should provide basic macro functionality, like running a function on increasingly larger data
+# currently unused, not really sure what I want here
 
 class Perf( ):
 

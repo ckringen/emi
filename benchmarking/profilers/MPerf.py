@@ -6,7 +6,7 @@ from memory_profiler import profile
 class MPerf( ):
     ''' 
     global state object to hold all benchmark functions, plus some utility
-    methods for running and formatting according to line by line profiling
+    methods for running and formatting according to memory usage
     '''    
     
     def __init__(self, function, out="logging.out"):
@@ -15,11 +15,11 @@ class MPerf( ):
 
     def __call__( self, *args ):
         ''' instance of class getting called triggers this, i.e. a decorated function '''
-        self.func = profile(selffunc)
-        self.func( )
-        self.printCSVInstance(elapsed, args[0])
+        outf = self.getFilestream(*args)
+        self.func = profile(self.func, stream=outf)
 
-    def printCSVInstance( self, output, outfile ):
-        with open( outfile, "w" ) as f:
-            # output = "elapsed time was: " + str(output)
-            f.write(output)
+        self.func( self )
+
+    def getFilestream( self, output_string ):
+        f = open(output_string,"w")
+        return f

@@ -1,5 +1,5 @@
 
-# decorator class, wrapper around cProfile
+# decorator class, thin wrapper around cProfile
 
 # TODO:
 # clean up printing machinery
@@ -23,7 +23,7 @@ class CPerf( ):
         s.enable( )
 
         print("running self.func ", self.func)
-        self.func( )
+        self.func( self )
 
         s.disable( )
         self.printCSVInstance(s,args[0])

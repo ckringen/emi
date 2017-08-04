@@ -1,8 +1,17 @@
 setup.py
+benchmarking/__init__.py
 emi.egg-info/PKG-INFO
 emi.egg-info/SOURCES.txt
 emi.egg-info/dependency_links.txt
 emi.egg-info/top_level.txt
+profiling/research/async_examples/__init__.py
+profiling/research/async_examples/async_pipeline.py
+profiling/research/async_examples/concur_fut.py
+profiling/research/async_examples/coroutine_pipeline.py
+profiling/research/async_examples/processing_pipeline.py
+profiling/research/async_examples/simple_coroutine_example.py
+profiling/research/async_examples/threading_example.py
+profiling/research/async_examples/threading_pipeline.py
 src/__init__.py
 src/combine_ngram_counts.py
 src/count_skipgrams.py
@@ -14,4 +23,6 @@ src/querypairs.py
 src/syntngrams_depmi.py
 src/verbparts.py
 test/__init__.py
+test/dis_test.py
+test/lperf_test.py
 test/main_unittest.py

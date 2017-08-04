@@ -106,7 +106,7 @@ def consumer(queue):
             break
         else:
             c = collections.Counter( buf )
-            #print(c)
+            print(c)
             
     # ans = []
     # for i in iter( queue.get, None):

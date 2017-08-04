@@ -56,7 +56,8 @@ python setup.py install
 *** bits of count_skipgrams.py
 *** overall methodology
 
-** TODO refactor profiling module 
+** DONE refactor profiling module 
+   CLOSED: [2017-08-03 Thu 22:53]
    Base off of google benchmark, which I used in a previous C++ project.
    The idea is that make every test a standalone function, e.g. a static/global func, 
    and then decorate those with a profile class that gives us an iterator, 
@@ -76,15 +77,12 @@ python setup.py install
     | BM_CalculatePiRange/64   | 609 ns  | 609 ns   |    1140647 |                     3.15746 |
     |                          |         |          |            |                             |
                   
-*** TODO profile class for each profiler
+*** DONE profile class for each profiler
+    CLOSED: [2017-08-03 Thu 22:53]
     1. [X] cProfile
-    2. [ ] MemoryProfiler
-    3. [ ] LineProfiler
+    2. [X] MemoryProfiler
+    3. [X] LineProfiler
     4. [X] time
-
-*** TODO ranges macro
-    I think this should work just like a decorator that builds a chunk of data according to some given parameter
-    and then calls the to-be-profiled function on it repeatedly for larger and larger data
 
 *** DONE print stats data as csv
     CLOSED: [2017-07-12 Wed 19:51]
@@ -141,15 +139,30 @@ python setup.py install
     CLOSED: [2017-08-03 Thu 13:24]
 *** DONE put getopts in a function? weirdly doesn't work
     CLOSED: [2017-08-03 Thu 13:24]
-** TODO fixtures for each style of skipgramming   
+** DONE fixtures for each style of skipgramming   
+   CLOSED: [2017-08-04 Fri 01:09]
    Run all the below from runProf.sh.
-   1. [ ] async
-   2. [ ] threads
-   3. [ ] processes
-   4. [ ] generators
-   5. [ ] data sources
-
+   1. [X] async
+   2. [X] threads
+   3. [X] processes
+   4. [X] generators
+   5. [X] data sources
+** DONE printing for all profilers
+   CLOSED: [2017-08-03 Thu 22:52]
+   1. [X] CPerf
+   2. [X] LPerf
+   3. [X] MPerf
+   4. [X] TPerf
+   5. [X] DPerf
+** TODO refactor benchmarking module
+   It probably just needs to be overhauled.  
+**** Could just subclass unittest to get a benchmark class 
+     and then subclass that for specific fixtures/units
+**** figure out some general sense in which benchmarking is different than unittesting
+     maybe the ability to attach code to code? If so, then just keep on keeping on with 
+     the current version, figure out function decorate/registration, calling instances, etc.
 ** TODO cython versions of the skipgramming pipelines
+** TODO try using pypy
 ** TODO theory for investigating performance
    We have a number of tools to investigate performance,
   
@@ -167,8 +180,7 @@ python setup.py install
    Essentially all we have is a relativistic approach:
 
        *compare two pieces of code side by side*
-
-
+       
 * Directives
 2017-05-10
 
