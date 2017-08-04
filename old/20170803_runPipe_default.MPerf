@@ -1,0 +1,12 @@
+Filename: profiling/fixtures/fixtureGenerators.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   103     28.3 MiB      0.0 MiB       def runPipe( self, outfilename ):
+   104     28.3 MiB      0.0 MiB           self.read_mmap(
+   105     42.6 MiB     14.3 MiB                      self.skipgram( ) )
+   106                                     
+   107     42.6 MiB      0.0 MiB           grams = itertools.chain.from_iterable( self.deq )
+   108     42.6 MiB      0.0 MiB           c = collections.Counter( grams )
+
+

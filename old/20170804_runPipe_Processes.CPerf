@@ -1,0 +1,108 @@
+ncalls	tottime	percall	cumtime	percall	filename:lineno(function)
+2	4.4e-05	2.2e-05	0.001485	0.0007425	__init__
+1	8e-06	8e-06	1.1e-05	1.1e-05	poll
+2	0.00010899999999999999	5.4499999999999997e-05	0.000111	5.55e-05	__init__
+1	2e-06	2e-06	2e-06	2e-06	Popen
+1	2.1e-05	2.1e-05	6.1e-05	6.1e-05	<module>
+2	0.00018199999999999998	9.099999999999999e-05	0.001428	0.000714	_launch
+1	1e-06	1e-06	1e-06	1e-06	<method 'disable' of '_lsprof.Profiler' objects>
+2	5.1e-05	2.55e-05	0.018157	0.0090785	_Popen
+2	4.9999999999999996e-06	2.4999999999999998e-06	4.9999999999999996e-06	2.4999999999999998e-06	get_context
+2	5.6999999999999996e-05	2.8499999999999998e-05	0.018101	0.0090505	_Popen
+2	3.1e-05	1.55e-05	4.8e-05	2.4e-05	__init__
+2	1.7e-05	8.5e-06	2.8e-05	1.4e-05	_cleanup
+4	3e-06	7.5e-07	3e-06	7.5e-07	<genexpr>
+2	0.000108	5.4e-05	0.018309	0.0091545	start
+2	1e-06	5e-07	1e-06	5e-07	<built-in method from_bytes>
+2	0.0	0.0	0.0	0.0	<method 'get' of 'dict' objects>
+2	2e-06	1e-06	2e-06	1e-06	<method 'copy' of 'dict' objects>
+4	1.6e-05	4e-06	1.6e-05	4e-06	<method 'add' of 'set' objects>
+10	7e-06	7e-07	9.999999999999999e-06	1e-06	<method 'join' of 'str' objects>
+14	1e-06	7.142857142857142e-08	1e-06	7.142857142857142e-08	<method 'rstrip' of 'str' objects>
+8	4.9999999999999996e-06	6.249999999999999e-07	4.9999999999999996e-06	6.249999999999999e-07	<method 'rpartition' of 'str' objects>
+1	1e-06	1e-06	1e-06	1e-06	<method 'endswith' of 'str' objects>
+4	2e-06	5e-07	2e-06	5e-07	<method 'format' of 'str' objects>
+1	3.4e-05	3.4e-05	3.6e-05	3.6e-05	<built-in method builtins.__build_class__>
+1	1.8e-05	1.8e-05	2.1e-05	2.1e-05	<built-in method builtins.any>
+1	2e-06	2e-06	6.3e-05	6.3e-05	<built-in method builtins.exec>
+6	4.9999999999999996e-06	8.333333333333332e-07	4.9999999999999996e-06	8.333333333333332e-07	<built-in method builtins.getattr>
+7	1.9999999999999998e-05	2.857142857142857e-06	1.9999999999999998e-05	2.857142857142857e-06	<built-in method builtins.hasattr>
+2	0.0	0.0	0.0	0.0	<built-in method builtins.isinstance>
+4	1e-06	2.5e-07	1e-06	2.5e-07	<built-in method builtins.len>
+4	3e-06	7.5e-07	3e-06	7.5e-07	<built-in method builtins.next>
+1	3.1e-05	3.1e-05	3.1e-05	3.1e-05	<built-in method builtins.print>
+1	1e-06	1e-06	1e-06	1e-06	<built-in method builtins.setattr>
+3	0.0	0.0	0.0	0.0	<built-in method _imp.acquire_lock>
+4	1e-06	2.5e-07	1e-06	2.5e-07	<built-in method _imp.release_lock>
+1	1e-06	1e-06	1e-06	1e-06	<built-in method _imp.is_frozen>
+1	2e-06	2e-06	2e-06	2e-06	<built-in method _imp._fix_co_filename>
+1	4.7e-05	4.7e-05	4.7e-05	4.7e-05	<built-in method marshal.loads>
+2	0.0	0.0	0.0	0.0	<built-in method _thread.allocate_lock>
+2	1e-06	5e-07	1e-06	5e-07	<built-in method _thread.get_ident>
+3	2.8e-05	9.333333333333333e-06	2.8e-05	9.333333333333333e-06	<built-in method posix.stat>
+2	0.001095	0.0005475	0.001095	0.0005475	<built-in method posix.fork>
+6	2e-06	3.333333333333333e-07	2e-06	3.333333333333333e-07	<built-in method posix.getpid>
+1	3e-06	3e-06	3e-06	3e-06	<built-in method posix.waitpid>
+2	2.2e-05	1.1e-05	2.2e-05	1.1e-05	<built-in method posix.close>
+2	1.8e-05	9e-06	1.8e-05	9e-06	<built-in method posix.pipe>
+1	0.016007	0.016007	0.016007	0.016007	<method 'read' of '_io.FileIO' objects>
+4	1.3e-05	3.25e-06	1.3e-05	3.25e-06	<method 'flush' of '_io.TextIOWrapper' objects>
+1	4.9e-05	4.9e-05	0.018406	0.018406	runPipe
+2	4.9999999999999996e-06	2.4999999999999998e-06	6e-06	3e-06	add
+1	2.3e-05	2.3e-05	3.2999999999999996e-05	3.2999999999999996e-05	_validate_bytecode_header
+1	9e-06	9e-06	5.9e-05	5.9e-05	_compile_bytecode
+1	4e-06	4e-06	6e-06	6e-06	spec_from_file_location
+1	0.0	0.0	0.0	0.0	create_module
+1	4.9999999999999996e-06	4.9999999999999996e-06	0.016257999999999998	0.016257999999999998	exec_module
+1	2.2e-05	2.2e-05	0.016186	0.016186	get_code
+1	1e-06	1e-06	1e-06	1e-06	__init__
+1	1e-06	1e-06	1e-06	1e-06	get_filename
+1	4.4e-05	4.4e-05	0.016051	0.016051	get_data
+1	2e-06	2e-06	7e-06	7e-06	path_stats
+1	1e-06	1e-06	1e-06	1e-06	_path_importer_cache
+1	7e-06	7e-06	9.499999999999999e-05	9.499999999999999e-05	_get_spec
+1	1e-06	1e-06	9.6e-05	9.6e-05	find_spec
+1	3e-06	3e-06	9.999999999999999e-06	9.999999999999999e-06	_get_spec
+1	2.7e-05	2.7e-05	8.599999999999999e-05	8.599999999999999e-05	find_spec
+1	4e-06	4e-06	6.7e-05	6.7e-05	_call_with_frames_removed
+1	1e-06	1e-06	1e-06	1e-06	_verbose_message
+1	1e-06	1e-06	1e-06	1e-06	__init__
+1	1e-06	1e-06	1e-06	1e-06	__enter__
+4	3e-06	7.5e-07	3e-06	7.5e-07	<genexpr>
+1	9e-06	9e-06	3.1e-05	3.1e-05	__exit__
+6	1.2e-05	2e-06	1.3e-05	2.1666666666666665e-06	<listcomp>
+1	2e-06	2e-06	2e-06	2e-06	__init__
+2	4e-06	2e-06	2.4999999999999998e-05	1.2499999999999999e-05	cached
+1	2e-06	2e-06	2e-06	2e-06	parent
+1	1e-06	1e-06	1e-06	1e-06	has_location
+6	6e-06	1e-06	1.9999999999999998e-05	3.333333333333333e-06	_path_join
+1	8e-06	8e-06	4.1e-05	4.1e-05	_init_module_attrs
+1	3e-06	3e-06	4.6e-05	4.6e-05	module_from_spec
+1	1.2e-05	1.2e-05	0.01635	0.01635	_load_unlocked
+1	0.0	0.0	0.0	0.0	find_spec
+2	4.9999999999999996e-06	2.4999999999999998e-06	6e-06	3e-06	_path_split
+1	2e-06	2e-06	3e-06	3e-06	find_spec
+3	4e-06	1.3333333333333332e-06	3.2e-05	1.0666666666666666e-05	_path_stat
+3	4e-06	1.3333333333333332e-06	4e-06	1.3333333333333332e-06	__enter__
+3	3e-06	1e-06	4e-06	1.3333333333333332e-06	__exit__
+1	1e-06	1e-06	2.1e-05	2.1e-05	_path_isfile
+1	1.1e-05	1.1e-05	0.000118	0.000118	_find_spec
+1	1.2e-05	1.2e-05	0.016482999999999998	0.016482999999999998	_find_and_load_unlocked
+1	9.999999999999999e-06	9.999999999999999e-06	0.016527999999999998	0.016527999999999998	_find_and_load
+3	1.7e-05	5.666666666666667e-06	3.5e-05	1.1666666666666666e-05	_handle_fromlist
+1	3e-06	3e-06	1.9999999999999998e-05	1.9999999999999998e-05	_path_is_mode_type
+2	9e-06	4.5e-06	2.4999999999999998e-05	1.2499999999999999e-05	cache_from_source
+1	4e-06	4e-06	2.1e-05	2.1e-05	_get_cached
+6	6e-06	1e-06	6e-06	1e-06	_verbose_message
+1	1e-06	1e-06	2e-06	2e-06	_check_name_wrapper
+1	2e-06	2e-06	2e-06	2e-06	_new_module
+1	0.0	0.0	0.0	0.0	_relax_case
+1	4.9999999999999996e-06	4.9999999999999996e-06	4.9999999999999996e-06	4.9999999999999996e-06	__init__
+1	7e-06	7e-06	7e-06	7e-06	acquire
+1	7e-06	7e-06	8e-06	8e-06	release
+1	0.0	0.0	0.0	0.0	__init__
+1	4.9999999999999996e-06	4.9999999999999996e-06	2.2e-05	2.2e-05	__enter__
+1	4e-06	4e-06	1.2e-05	1.2e-05	__exit__
+2	8e-06	4e-06	9e-06	4.5e-06	_r_long
+1	1e-06	1e-06	1e-06	1e-06	cb
+1	4.9999999999999996e-06	4.9999999999999996e-06	9.999999999999999e-06	9.999999999999999e-06	_get_module_lock

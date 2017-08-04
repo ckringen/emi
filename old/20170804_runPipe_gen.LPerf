@@ -1,0 +1,15 @@
+Timer unit: 1e-06 s
+
+Total time: 1.06669 s
+File: profiling/fixtures/fixtureGenerators.py
+Function: runPipe at line 152
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   152                                               def runPipe( self, outfilename ):
+   153         1            2      2.0      0.0          self.readFile(
+   154         1      1043010 1043010.0     97.8                     self.skipgram( ) )
+   155                                                   
+   156         1            5      5.0      0.0          grams = itertools.chain.from_iterable( self.deq )
+   157         1        23669  23669.0      2.2          c = collections.Counter( grams )
+

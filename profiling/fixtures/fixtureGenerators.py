@@ -60,7 +60,7 @@ class benchGenerator( benchmarking.BenchFixture ):
             target.send( buf )
 
     
-    @profile
+    #@profile
     @coroutine
     def tokenize( self ): #target ):
         while True:
@@ -149,7 +149,7 @@ class benchGenerator( benchmarking.BenchFixture ):
             line = (yield)
             c.update( line )
 
-    @profile
+    #@profile
     def runPipe( self, outfilename ):
         self.readFile(
                    self.skipgram( ) )
@@ -159,7 +159,7 @@ class benchGenerator( benchmarking.BenchFixture ):
 
         
 if __name__ == '__main__':
-    #benchmarking.Benchmark( )
+    benchmarking.Benchmark( )
 
-    bg = benchGenerator( )
-    bg.runPipe( "myfile.out")
+    # bg = benchGenerator( )
+    # bg.runPipe( "myfile.out")
