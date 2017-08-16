@@ -187,15 +187,24 @@ def main(k, s=None ):
         err("Printing %s skipgrams..." % len(result))
         if result:
             print("done")
-            for key, count in result:
+            for key, count in result:<<<<<<< HEAD
                 print(" ".join(key), count) #, sep="\t")
         else:
             break
         
 if __name__ == '__main__':
-    # f = open(sys.argv[1], 'r+b')
-    # mmap_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)    
-    # main2(mmap_file,sys.argv[2])#,100000)
 
-    main(sys.argv[2])
+    #main(sys.argv[2])
+    main( 2, 100000 )
     
+    # f = open('../profiling/SampleData/large_file.txt', 'r+b')
+    # #mmap_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+
+    # a = time.time( )
+    # #f = open("../profiling/SampleData/large_file.txt", "r")
+    # main2(f,2,100000)
+    # #main(*sys.argv[1:])        
+    # b = time.time( )
+
+    # print(b - a )
+

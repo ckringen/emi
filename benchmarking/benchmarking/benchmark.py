@@ -26,8 +26,8 @@ class Benchmark( ):
         self.module = module
         self.args = self.parse_commandline( )
         self.runAll = False
-        # self.loader()
-        # self.main( )
+        self.loader()
+        self.main( )
         
     def parse_commandline( self ):
         parser = argparse.ArgumentParser( )        
@@ -39,6 +39,7 @@ class Benchmark( ):
         parser.add_argument("-i", "--identifier", help="string to identify runs of a bench fixture, used to construct the outfile names" )
         args = parser.parse_args( )
         return args
+
     
     def construct_outfilename( self, name, profiler=None, iden="default" ):
         if self.args.identifier:
@@ -49,15 +50,15 @@ class Benchmark( ):
             ofn = "{}_{}_{}.{}".format( dt, name, iden, profiler.__name__ )
         return ofn
 
+    
     def add_profiler(self, func_list, profiler ):
-
         # if you just write a flag with no args, we see "[]" instead of "None",
-        #  so we assume you want to decorate every function
+        # so we assume you want to decorate every function
         if func_list == [ ]:
             func_list = [i for i,k in getmembers(self.fixture) if ismethod(k) and "__" not in i]
             if profiler == LPerf or profiler == MPerf or profiler == CPerf:
                 self.runAll = True
-            
+                
         for name, val in getmembers(self.fixture):
             if name in func_list:
                 setattr( self.fixture, name, profiler(val))

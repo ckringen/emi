@@ -2,6 +2,7 @@
 import itertools
 import collections
 import asyncio
+import mmap
 
 import benchmarking
 
@@ -51,10 +52,10 @@ class benchAsync( benchmarking.BenchFixture ):
         print(c)
         return c
         
-    async def mmapAsync( mmap_file ): #, q, overall ):
+    async def mmapAsync( self ): #, q, overall ):
         buffer_size = 100000
         while True:
-            buf = mmap_file.read(buffer_size)                     
+            buf = self.f.read(buffer_size)                     
             if not buf:
                 break
 
@@ -72,35 +73,35 @@ class benchAsync( benchmarking.BenchFixture ):
             #         else:
             #             break
 
-    async def tokenizeAsync2( s ): 
+    async def tokenizeAsync2( self, s ): 
         tokens = s.split( )
         await pushOnQAsync( tokens ) 
 
     
-    async def pushOnQAsync( t ): 
+    async def pushOnQAsync( self, t ): 
         for i in t:
             q.append(i) 
             await skipgramAsync( )
 
 
-    async def skipgramAsync2( ):
+    async def skipgramAsync2( self ):
         while True:
             if len(q) > 2:
                 await countAsync( (q[0], q[2]) )
             else:
                 break
         
-    async def countAsync2( tup ):
+    async def countAsync2( self, tup ):
         q.popleft( )
         return overall
         
-    async def mainAsync( mmap_file): 
-        await mmapAsync( mmap_file ) 
+    async def mainAsync( self ): 
+        await mmapAsync( ) 
 
 
-    def runPipe( self ):
+    def runPipe( self, outfile ):
         loop = asyncio.get_event_loop( )
-        result = loop.run_until_complete(mainAsync( self.f ) )
+        result = loop.run_until_complete(self.mmapAsync( ) )
             
 
 if __name__ == "__main__":
