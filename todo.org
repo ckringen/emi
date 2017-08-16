@@ -8,6 +8,7 @@ Investigate how to profile NLP algorithms in python, look for ways to improve pe
  
 * Objectives
 ** TODO slurm scripts
+   recall how sbatch, sarray and all that works
 ** DONE working examples of cython
    CLOSED: [2017-07-03 Mon 10:12]
 ** DONE working examples of numba
@@ -56,7 +57,7 @@ python setup.py install
 *** bits of count_skipgrams.py
 *** overall methodology
 
-** DONE refactor profiling module 
+** DONE refactor profiling module
    CLOSED: [2017-08-03 Thu 22:53]
    Base off of google benchmark, which I used in a previous C++ project.
    The idea is that make every test a standalone function, e.g. a static/global func, 
@@ -139,7 +140,7 @@ python setup.py install
     CLOSED: [2017-08-03 Thu 13:24]
 *** DONE put getopts in a function? weirdly doesn't work
     CLOSED: [2017-08-03 Thu 13:24]
-** DONE fixtures for each style of skipgramming   
+** DONE fixtures for each style of skipgramming
    CLOSED: [2017-08-04 Fri 01:09]
    Run all the below from runProf.sh.
    1. [X] async
@@ -154,7 +155,7 @@ python setup.py install
    3. [X] MPerf
    4. [X] TPerf
    5. [X] DPerf
-** TODO refactor benchmarking module
+** TODO overhaul benchmarking module
    It probably just needs to be overhauled.  
 **** Could just subclass unittest to get a benchmark class 
      and then subclass that for specific fixtures/units
@@ -180,7 +181,7 @@ python setup.py install
    Essentially all we have is a relativistic approach:
 
        *compare two pieces of code side by side*
-       
+** TODO run pipelines on data on openmind cluster
 * Directives
 2017-05-10
 

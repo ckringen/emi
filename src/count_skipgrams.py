@@ -18,11 +18,11 @@ EOS = "</s>"
 def err(x):
     print(x, file=sys.stderr)
     sys.stderr.flush()
-@profile
+
 def ichunks(iterable, size):
     while True:
         yield itertools.islice(iterable, size)        
-@profile
+
 def tokenize(line):
 
     #print("tokenizing")
@@ -65,12 +65,12 @@ def tokenize(line):
 # and then merging them? (Is the merge truly O(1) space in the average case?)
 
 flat = itertools.chain.from_iterable
-@profile
+
 def run(lines, k):
     
     assert k >= 0
     window_size = k + 2
-    @profile    
+    
     def get_skipgrams(xs): # gets called as many times as there are lines
         
         its = itertools.tee(xs, window_size)   # so xs is an iterable, such that it can return an iterator
@@ -146,7 +146,7 @@ def run(lines, k):
 #             130926 lines processed
 # It takes 15 iterations of s=10000---seems like it should take 14?
 
-@profile
+
 def main2(textfile, k, s=None ):
     ''' textfile can be a regular file, or a fileobject, e.g. sys.stdin '''
     err("Beginning skipgram counts")
@@ -188,8 +188,8 @@ def main(k, s=None ):
         err("Printing %s skipgrams..." % len(result))
         if result:
             print("done")
-            # for key, count in result:
-            #     print(" ".join(key), count, sep="\t")
+            for key, count in result:
+                print(" ".join(key), count, sep="\t")
         else:
             break
 
@@ -209,14 +209,15 @@ def getSkipgrams(xs): # gets called as many times as there are lines
         
 if __name__ == '__main__':
 
+    main( 2, 100000 )
+    
+    # f = open('../profiling/SampleData/large_file.txt', 'r+b')
+    # #mmap_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
 
-    f = open('../profiling/SampleData/large_file.txt', 'r+b')
-    #mmap_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+    # a = time.time( )
+    # #f = open("../profiling/SampleData/large_file.txt", "r")
+    # main2(f,2,100000)
+    # #main(*sys.argv[1:])        
+    # b = time.time( )
 
-    a = time.time( )
-    #f = open("../profiling/SampleData/large_file.txt", "r")
-    main2(f,2,100000)
-    #main(*sys.argv[1:])        
-    b = time.time( )
-
-    print(b - a )
+    # print(b - a )
