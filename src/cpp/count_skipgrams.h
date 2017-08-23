@@ -1,7 +1,7 @@
 
 # include <vector>
-# include <utility>
 # include <string>
+# include <utility>
 # include <unordered_map>
 
 // need to provide a custom hash for using tgram as a key
@@ -12,23 +12,26 @@ typedef std::pair< std::string, std::string > tgram;   // "two gram", i.e. 2-ski
 
 class skipgram {  
  public:
-  skipgram( std::string fname, int wnd_sz );
+  skipgram( const std::string& fname, int wnd_sz );
   ~skipgram( ) = default;
   // copy
   // move
   // assignment
-
-  void readFile( );
+  
+  //void readFile( );
+  //void split1( std::string text, const std::string& delims );
+  //void readGzip( );
+  
   void readStdin( );
-  void readGzip( );
-  void processLine( std::string line );
+  void split2( const std::string &source );
+  void processLine( const std::string& line );
   void writeOut( );
 
 private:
   std::unordered_map< tgram, int, boost::hash< tgram > > counter;
   std::string infname;
-  std::string outfname;
   int window_size;
+  //std::string outfname;
 };
 
 
