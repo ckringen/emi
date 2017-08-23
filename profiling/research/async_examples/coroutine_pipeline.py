@@ -27,7 +27,7 @@ def coroutine(func):
 # but if it's 8 or 10, time taken drops to .47; possibly due to average word size??
 #@profile
 def read_mmap( f, target ):
-    pdb.set_trace( )
+    #pdb.set_trace( )
     buffer_size = 10
     while True:
         buf = f.read(buffer_size)
@@ -37,18 +37,18 @@ def read_mmap( f, target ):
 
         #this either has a bug, or is just super slow
         # if you read part way into a word, read some more until you hit a space
-        if buf[-1] != 32:
-            extra = b""
-            while True:
-                extra_byte = f.read(1)
-                if extra_byte:
-                    if extra_byte[0] != 32:
-                        extra = extra + str.encode(extra_byte)
-                    else:
-                        buf = buf + extra + str.encode(extra_byte)
-                        break
-                else:
-                    break
+        # if buf[-1] != 32:
+        #     extra = b""
+        #     while True:
+        #         extra_byte = f.read(1)
+        #         if extra_byte:
+        #             if extra_byte[0] != 32:
+        #                 extra = extra + str.encode(extra_byte)
+        #             else:
+        #                 buf = buf + extra + str.encode(extra_byte)
+        #                 break
+        #         else:
+        #             break
 
         target.send( buf )
         
@@ -160,10 +160,14 @@ def count():
 
 if __name__ == '__main__':
 
-    # deq = collections.deque( )
-    # window_size = 2
-    # f = open("../../SampleData/large_file.txt", "r")
+    deq = collections.deque( )
+    window_size = 2
+    f = open("../../SampleData/large_file.txt", "r")
+
+    import objgraph
     
+    objgraph.show_backrefs( read_mmap( f, skipgram( ) ) , filename="refs.png", max_depth=10 )
+
     # print(read_mmap( f,
     #            skipgram( ) ) )
     #                #count( ) ) )

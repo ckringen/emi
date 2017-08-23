@@ -221,3 +221,7 @@ if __name__ == '__main__':
     # b = time.time( )
 
     # print(b - a )
+
+    # import objgraph
+
+    #    objgraph.show_backrefs( main( 2, 100000 ) , filename="refs.png", max_depth=10 )
