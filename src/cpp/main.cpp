@@ -1,6 +1,5 @@
 
 # include <string>
-
 # include "count_skipgrams.h"
 
 int main( int argc, char** argv ) {  
@@ -8,7 +7,7 @@ int main( int argc, char** argv ) {
   int window_sz = atoi(argv[2]);
   
   skipgram s( fname, window_sz );
-  s.readFile( );
+  s.readStdin( );
   s.writeOut( );
   
   return 0;

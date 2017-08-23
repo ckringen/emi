@@ -16,7 +16,7 @@ BOS = "<s>"
 EOS = "</s>"
 
 def err(x):
-    print(x, file=sys.stderr)
+    #print(x, file=sys.stderr)
     sys.stderr.flush()
 
 def ichunks(iterable, size):
@@ -24,9 +24,6 @@ def ichunks(iterable, size):
         yield itertools.islice(iterable, size)        
 
 def tokenize(line):
-
-    #print("tokenizing")
-
     parts = line.strip().split()
     parts.insert(0, BOS) 
     parts.append(EOS)
@@ -67,10 +64,10 @@ def tokenize(line):
 flat = itertools.chain.from_iterable
 
 def run(lines, k):
-    
+
     assert k >= 0
     window_size = k + 2
-    
+
     def get_skipgrams(xs): # gets called as many times as there are lines
         
         its = itertools.tee(xs, window_size)   # so xs is an iterable, such that it can return an iterator
@@ -88,15 +85,14 @@ def run(lines, k):
             # ct = collections.Counter(tup)
             # print(ct)            
             #print( "blocks: ", block[0], block[-1], type(block[0]), type(block))
+            
             yield block[0], block[-1]                          # "window_size-skip-bigrams", e.g. 4-skip-2-grams
 
     grams = flat(map(get_skipgrams, map(tokenize, lines)))
-
-    #print(type(grams))
     
     # All the work happens here:
     counts = collections.Counter(grams) # goes to optimized C subroutine _count_elements 
-    #print(counts.items( ))
+    
     return counts.items()
 
     
@@ -149,6 +145,9 @@ def run(lines, k):
 
 def main2(textfile, k, s=None ):
     ''' textfile can be a regular file, or a fileobject, e.g. sys.stdin '''
+
+    print("inside main")
+
     err("Beginning skipgram counts")
     k = int(k)
 
@@ -162,12 +161,12 @@ def main2(textfile, k, s=None ):
     for chunk in chunks:
         #err("Counting skipgrams...")
         result = run(chunk, k)
+        print(result)
 
         #err("Printing %s skipgrams..." % len(result))
         if result:
-            print("done")
-            # for key, count in result:
-            #     print(" ".join(key), count, sep="\t")
+            for key, count in result:
+                print(" ".join(key), count)#, sep="\t")
         else:
             break
 
@@ -188,27 +187,14 @@ def main(k, s=None ):
         err("Printing %s skipgrams..." % len(result))
         if result:
             print("done")
-            for key, count in result:
-                print(" ".join(key), count, sep="\t")
+            for key, count in result:<<<<<<< HEAD
+                print(" ".join(key), count) #, sep="\t")
         else:
             break
-
-
-
-def getSkipgrams(xs): # gets called as many times as there are lines
-
-    print("xs is ", xs)
-
-    its = itertools.tee(xs, 2)   # so xs is an iterable, such that it can return an iterator
-    for i, iterator in enumerate(its):
-        for _ in range(i):
-            next(iterator)
-    for block in zip(*its):
-        yield block[0], block[-1]
-
         
 if __name__ == '__main__':
 
+    #main(sys.argv[2])
     main( 2, 100000 )
     
     # f = open('../profiling/SampleData/large_file.txt', 'r+b')
