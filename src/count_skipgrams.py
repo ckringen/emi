@@ -187,7 +187,7 @@ def main(k, s=None ):
         err("Printing %s skipgrams..." % len(result))
         if result:
             print("done")
-            for key, count in result:<<<<<<< HEAD
+            for key, count in result:
                 print(" ".join(key), count) #, sep="\t")
         else:
             break
