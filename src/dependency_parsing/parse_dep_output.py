@@ -1,9 +1,10 @@
 
 # walk ascii output of dependency parser for collecting path length counts
 
+import sys
 import collections
 import itertools
-from graphviz import Digraph
+#from graphviz import Digraph
 
 
 flat = itertools.chain.from_iterable
@@ -66,6 +67,7 @@ def main( k, s=None ):
 
 
 def readPMPF( filename, graph=False ):
+<<<<<<< HEAD
     with open( filename, "r" ) as f:
         p_string = [ ]
         for line in f:
@@ -82,8 +84,27 @@ def readPMPF( filename, graph=False ):
             except IndexError as e:
                 print("error: ", line)
 
+    # with open( filename, "r" ) as f:
+    p_string = [ ]
+    for line in sys.stdin:
+        try:
+            line = line.strip( ).split( )
+            if line:
+                line = [ line[ 0 ], line[ 1 ], line[ 7 ], line[ 6 ] ]
+                p_string.append( line )
+            else:
+                #print(p_string)
+                parsePMPF( p_string )
+                # if graph:
+                #     createDotGraph( p_string )
+                p_string = [ ]
+        except IndexError as e:
+            print("error: ", line)
+
+
             # need to flsuh the leftover bits if we didn't reach another 1
             #print("final p_string: ", p_string)
+
                 
 def parsePMPF( p_list ):
     nodes = { "0" : "ROOT" }
@@ -96,7 +117,11 @@ def parsePMPF( p_list ):
         s = nodes[e[1]]
         e[0] = f
         e[1] = s
+        
         deq.append( [(e[0], e[1])] )               # how should we do this part?
+
+        deq.append( [(e[0], e[1])] )               # so here's the main question, how should we do this part?
+
 
         
 def countPaths( deq ):
@@ -105,12 +130,12 @@ def countPaths( deq ):
     return counts
 
 
-def createDotGraph( p_list ):
-    dot = Digraph( comment= "dep_graph" )
-    for i in p_list:
-        dot.node( i[ 0 ], label=i[ 1 ] + ":" + i[ 2 ] )
-        dot.edge( i[ 3 ], i[ 0 ] )
-    dot.render( "dep_graph.gv" )
+# def createDotGraph( p_list ):
+#     dot = Digraph( comment= "dep_graph" )
+#     for i in p_list:
+#         dot.node( i[ 0 ], label=i[ 1 ] + ":" + i[ 2 ] )
+#         dot.edge( i[ 3 ], i[ 0 ] )
+#     dot.render( "dep_graph.gv" )
 
     
 if __name__ == "__main__":
@@ -121,4 +146,6 @@ if __name__ == "__main__":
     
     c = countPaths( deq )
 
-    print(c)
+    for key, count in c.items( ) :
+        print("{0} {1}\t{2}".format(key[0], key[1], count))
+
