@@ -1,11 +1,11 @@
 
 # build count_skipgrams for great good
 
-# g++ -std=c++14 -o cs -Iboost_1_64_0 main.cpp count_skipgrams.cpp 
+# g++ -std=c++14 -o cs -Iboost_1_65_0 main.cpp count_skipgrams.cpp 
 
 CPP = g++
 FLAGS = -std=c++11 -O3
-I = -Iboost_1_64_0
+I = -Iboost_1_65_0
 bin = count_skipgrams
 
 count_skipgrams: main.o count_skipgrams.o
