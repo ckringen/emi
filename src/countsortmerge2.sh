@@ -22,6 +22,7 @@ uniqsum_script=./src/uniqsum.sh
 
 #time zcat $data | python ./src/$count_script $data $degree | gzip > $counted_path
 
+# to do dependency counting, drop in dependency_parsing/whatever
 time zcat $data | ./src/$count_script $data $degree | gzip > $counted_path
 
 # pushd ./prepro
