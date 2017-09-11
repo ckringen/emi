@@ -1,14 +1,19 @@
 
 # build some things for great good
 
+# g++ -std=c++14 -o cs -Iboost_1_65_0 main.cpp count_skipgrams.cpp 
+
 # # lib paths gdb wants to see
 # /lib64
 # /cm/shared/apps/mpich/ge/gcc/64/3.1/lib
 # /usr/lib64
 
-
 MPICC = mpic++
 CPP = g++
+
+FLAGS = -std=c++11 -O3
+I = -Iboost_1_65_0
+bin = count_skipgrams
 
 FLAGS = -std=c++11 -g
 INCLUDE_PATH = -I/om/user/ckringen/thirdparty/boost-materials/boost_1_65_0
