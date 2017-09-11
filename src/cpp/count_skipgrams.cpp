@@ -1,4 +1,4 @@
-me/
+
 # include <fstream>
 # include <iostream>
 # include <iterator>
@@ -29,22 +29,27 @@ skipgram::skipgram( const std::string& fname, int window_sz=2 ) {
 // }
 
 
-// void skipgram::readFile( ) {
-//   std::string line;
-//   std::ifstream myfile;
+void skipgram::readFile( ) {
+  std::string line;
+  std::ifstream myfile;
+  
+  myfile.open (infname, std::ios::in);
+  if (myfile.is_open())
+    {
+      while ( std::getline (myfile,line) )
+	{
+	  //processLine( line );
+	  split2( line );
+	}
+      myfile.close();
+    }
+  else std::cout << "Unable to open file\n"; 
+}
 
-//   myfile.open (infname, std::ios::in);
-//   if (myfile.is_open())
-//   {
-//     while ( std::getline (myfile,line) )
-//     {
-//       processLine( line );
-//     }
-//     myfile.close();
-//   }
-//   else std::cout << "Unable to open file\n"; 
-// }
-
+dict skipgram::getCounter( ) {
+  return counter;
+}
+		    
 
 void skipgram::readStdin( ) {
   std::string line;
@@ -79,7 +84,7 @@ void skipgram::split2( const std::string &source ) {
   bool keepEmpty = false;
   size_t prev = 0;
   size_t next = 0;
-
+  
   // tokenize
   while ((next = source.find_first_of(delimiter, prev)) != std::string::npos)
     {
@@ -93,7 +98,7 @@ void skipgram::split2( const std::string &source ) {
     {
       results.push_back(source.substr(prev));
     }
-
+  
   // skipgram
   std::vector< std::string >::iterator effend = results.end( );
   std::advance(effend, -window_size);
@@ -141,7 +146,7 @@ void skipgram::split2( const std::string &source ) {
 void skipgram::processLine( const std::string& line ) {
   // tokenize 
   boost::tokenizer<> tok( line );
-
+  
   // skipgram
   for( boost::tokenizer<>::iterator i = tok.begin(); i != tok.end(); ++i) {
     int remaining = std::distance( i, tok.end( ) );
