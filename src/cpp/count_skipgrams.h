@@ -21,7 +21,7 @@ class skipgram {
   
   void readFile( );
   //void split1( std::string text, const std::string& delims );
-  //void readGzip( );
+  void readGzip( );
   
   void readStdin( );
   void split2( const std::string &source );

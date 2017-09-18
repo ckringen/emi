@@ -1,16 +1,18 @@
 
 # include <fstream>
 # include <iostream>
+# include <algorithm>
 # include <iterator>
 # include <utility>
 
 # include <cstring>
 # include <memory>
-#include <cassert>
+# include <cassert>
 
 # include <string>
 # include <vector>
 
+# include <boost/tokenizer.hpp>
 # include <boost/iostreams/stream.hpp>
 # include <boost/iostreams/device/file.hpp>
 # include <boost/iostreams/copy.hpp>
@@ -22,21 +24,6 @@
 # include "count_skipgrams.h"
 
 namespace io = boost::iostreams;
-
-
-counter combineCounters( counter c1, counter c2 ) {
-  for( auto ci=c1.begin( ); ci!=c1.end( ); ++ci ) {
-    tgram key = std::make_pair( ci->first.first, ci->first.second );
-    auto got = c2.find( key );    
-    if ( got == c2.end( ) ) {
-      c2[ key ] = ci->second;
-    }
-    else {
-      c2[ key ] += ci->second;
-    }    
-  }
-  return c2;
-}
 
 skipgram::skipgram( const std::string& fname, int window_sz=2 ) {
   infname = fname;
@@ -89,7 +76,7 @@ void skipgram::readGzip( ) {
   catch(const boost::iostreams::gzip_error& e) {
     std::cout << e.what() << '\n';
   }
-
+}
 
 // need Boost to read a gzipped file either by bytes or newlines
 // void skipgram::readGzip( ) {
@@ -106,6 +93,10 @@ void skipgram::readFile( ) {
       while ( std::getline (myfile,line) )
 	{
 	  //processLine( line );
+	  
+	  // begin and end tokens, lowercase
+	  line = "<s> " + line + " </s>";
+	  std::transform( line.begin( ), line.end( ), line.end( ), ::tolower );  
 	  split2( line );
 	}
       myfile.close();
@@ -163,14 +154,14 @@ void skipgram::split2( const std::string &source ) {
       tgram skip = std::make_pair( *i, *j );
       
       // count skigprams  
-      auto got = c.find( skip );
-      if ( got == c.end() ) {
-	c[ skip ] = 1;
+      auto got = counter.find( skip );
+      if ( got == counter.end() ) {
+	counter[ skip ] = 1;
       }
       else {
-    	++c[ skip ];
+    	++counter[ skip ];
       }
-    }    
+    }  
   }
 
   //return results;
@@ -226,7 +217,7 @@ void skipgram::writeOut( ) {
   // std::ofstream outfile;
   // outfile.open(outfname, std::ios::out );
   
-  for( auto i=c.begin( ); i != c.end( ); ++i ) {
+  for( auto i=counter.begin( ); i != counter.end( ); ++i ) {
     std::cout << i->first.first << ' ' << i->first.second << '\t' << i->second << '\n';
     //outfile << i->first.first << ' ' << i->first.second << '\t' << i->second << '\n';
   }
