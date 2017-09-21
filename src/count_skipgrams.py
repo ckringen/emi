@@ -9,6 +9,7 @@ import sys
 import itertools
 import collections
 
+import pickle
 import fileinput
 
     
@@ -93,7 +94,7 @@ def run(lines, k):
     # All the work happens here:
     counts = collections.Counter(grams) # goes to optimized C subroutine _count_elements 
     
-    return counts.items()
+    return counts #.items()
 
     
 # Ideas:
@@ -146,7 +147,7 @@ def run(lines, k):
 def main2(textfile, k, s=None ):
     ''' textfile can be a regular file, or a fileobject, e.g. sys.stdin '''
 
-    print("inside main")
+    #print("inside main")
 
     err("Beginning skipgram counts")
     k = int(k)
@@ -161,14 +162,19 @@ def main2(textfile, k, s=None ):
     for chunk in chunks:
         #err("Counting skipgrams...")
         result = run(chunk, k)
-        print(result)
+        #print(result)
 
         #err("Printing %s skipgrams..." % len(result))
         if result:
-            for key, count in result:
-                print(" ".join(key), count)#, sep="\t")
+            #for key, count in result:
+                #print(" ".join(key), count)#, sep="\t")
+
+            # unsure if I need to do this...
+            b = pickle.dumps(result, protocol=pickle.HIGHEST_PROTOCOL)
+            return b
         else:
-            break
+            pass #return pickle.dumps(collections.Counter( ), protocol=pickle.HIGHEST_PROTOCOL)
+            #break
 
         
 def main(k, s=None ):
@@ -192,10 +198,9 @@ def main(k, s=None ):
         else:
             break
         
-if __name__ == '__main__':
+#if __name__ == '__main__':
 
     #main(sys.argv[2])
-    main( 2, 100000 )
     
     # f = open('../profiling/SampleData/large_file.txt', 'r+b')
     # #mmap_file = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
