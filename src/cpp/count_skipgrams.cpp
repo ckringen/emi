@@ -1,21 +1,29 @@
 
 # include <fstream>
 # include <iostream>
+# include <algorithm>
 # include <iterator>
+# include <utility>
 
 # include <cstring>
 # include <memory>
+# include <cassert>
 
 # include <string>
 # include <vector>
 
-// need Boost to tokenize strings, read gzip files
-//# include <boost/iostreams/filter/gzip.hpp>
 # include <boost/tokenizer.hpp>
+# include <boost/iostreams/stream.hpp>
+# include <boost/iostreams/device/file.hpp>
+# include <boost/iostreams/copy.hpp>
+# include <boost/iostreams/filter/gzip.hpp>
+# include <boost/iostreams/filter/zlib.hpp>
+# include <boost/iostreams/filtering_stream.hpp>
+# include <boost/iostreams/filtering_streambuf.hpp>
 
 # include "count_skipgrams.h"
 
-
+namespace io = boost::iostreams;
 
 skipgram::skipgram( const std::string& fname, int window_sz=2 ) {
   infname = fname;
@@ -23,6 +31,52 @@ skipgram::skipgram( const std::string& fname, int window_sz=2 ) {
   //outfname = infname + "." + "counts";      
 }
 
+void sanitize(std::string &stringValue) {
+  // Add backslashes.
+  for (auto i = stringValue.begin();;) { // i!=stringValue.end( ); ++i) {
+    auto const pos = std::find_if(
+				  i, stringValue.end(),
+				  [](char const c) { return '\\' == c 
+						     || '\'' == c 
+						     || '"' == c; }
+				  );
+    if (pos == stringValue.end()) {
+      break;
+    }
+    i = std::next(stringValue.insert(pos, '\\'), 2);
+  }
+  
+  // Removes others.
+  stringValue.erase(
+		    std::remove_if(
+				   stringValue.begin(), stringValue.end(), [](char const c) {
+				     return '\n' == c 
+				       || '\r' == c 
+				       || '\0' == c 
+				       || '\x1A' == c;
+				   }
+				   ),
+		    stringValue.end()
+		    );
+}
+
+void skipgram::readGzip( ) {
+  std::ifstream file(infname, std::ios_base::in | std::ios_base::binary);
+  try {
+    boost::iostreams::filtering_istream in;
+    in.push(boost::iostreams::gzip_decompressor());
+    in.push(file);
+    for(std::string str; std::getline(in, str); )
+      {
+	assert( str.length( ) > 0 ); 
+	split2( str );
+	//std::cout << "Processed line: " << str << '\n';
+      }
+  }
+  catch(const boost::iostreams::gzip_error& e) {
+    std::cout << e.what() << '\n';
+  }
+}
 
 // need Boost to read a gzipped file either by bytes or newlines
 // void skipgram::readGzip( ) {
@@ -39,11 +93,16 @@ void skipgram::readFile( ) {
       while ( std::getline (myfile,line) )
 	{
 	  //processLine( line );
+	  
+	  // begin and end tokens, lowercase
+	  line = "<s> " + line + " </s>";
+	  std::transform( line.begin( ), line.end( ), line.end( ), ::tolower );  
 	  split2( line );
 	}
       myfile.close();
     }
   else std::cout << "Unable to open file\n"; 
+
 }
 
 dict skipgram::getCounter( ) {
@@ -55,27 +114,9 @@ void skipgram::readStdin( ) {
   std::string line;
   while ( std::getline( std::cin, line ) )
     {
-      //processLine( line );
       split2( line );      
     }
 }
-
-// void skipgram::split1(std::string text, const std::string& delims)
-// {
-//   std::vector<std::string> tokens;
-//   std::size_t start = text.find_first_of(delims), end = 0;
-//   while((end = text.find_first_of(delims, start)) != std::string::npos)
-//     {
-//       tokens.push_back(text.substr(start, end - start));
-//       start = text.find_first_not_of(delims, end);
-//     }
-//   if(start != std::string::npos)
-//     tokens.push_back(text.substr(start));
-//   for( auto i=tokens.begin( ); i!=tokens.end( ); ++i ) {
-//     std::cout << *i << std::endl;
-//   }
-//   //return tokens;
-// }
 
 
 void skipgram::split2( const std::string &source ) {
@@ -115,13 +156,14 @@ void skipgram::split2( const std::string &source ) {
       // count skigprams  
       auto got = counter.find( skip );
       if ( got == counter.end() ) {
-    	counter[ skip ] = 1;
+	counter[ skip ] = 1;
       }
       else {
     	++counter[ skip ];
       }
-    }    
+    }  
   }
+
   //return results;
 }
 
@@ -169,7 +211,6 @@ void skipgram::processLine( const std::string& line ) {
     }
   }
 }
-
 
 void skipgram::writeOut( ) {
   
