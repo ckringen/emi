@@ -20,7 +20,7 @@ pydata="${files[${SLURM_ARRAY_TASK_ID}]}"
 counted_path=/om/user/ckringen/en.$id-bigrams-$degree-counted.txt.gz
 
 #cpp/count_skipgrams 
-count_script=dependency_parsing/parse_dep_output.py 
+count_script=python/dependency_parsing/parse_dep_output.py 
 
 echo "counting the skipgrams " $pydata   $counted_path
 time zcat $pydata | python ./$count_script | gzip > $counted_path

@@ -1,6 +1,11 @@
 
 # build some things for great good
 
+
+# g++ -std=c++11 -I/om/user/ckringen/thirdparty/boost-materials/boost_1_65_0 count_dependencies.cpp main_dependency.cpp -L/om/user/ckringen/thirdparty/boost-materials/boost_1_65_0/stage/lib -L/om/user/ckringen/thirdparty/zlib-materials/zlib-1.2.11 -lpthread -lboost_iostreams -lz -o dep && ./dep 2
+
+
+
 CPP = g++
 
 FLAGS = -std=c++11 -O3

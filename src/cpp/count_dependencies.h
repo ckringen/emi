@@ -17,17 +17,9 @@ class skipgram {
  public:
   skipgram( const std::string& fname, int wnd_sz );
   ~skipgram( ) = default;
-  
-  void readFile( );
+   
   void readGzip( );  
-  void readStdin( );
-  void readDependencies( );
-
-  void split2( const std::string &source );
-  void processLine( const std::string& line );
   void processDependency( const std::vector<std::vector<std::string>>& line );
-
-  void writeOut( );
   dict getCounter( );
   
  private:

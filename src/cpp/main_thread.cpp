@@ -64,9 +64,14 @@ void skipgram_func( int i, my_queue< dict >& mq, int window_sz ) {
   std::string idx = (i > 9) ? std::to_string(i) : "0" + std::to_string(i);
   std::string fname = "/om/user/ckringen/data/commoncrawl_en_deduped_filtered/en." + idx + ".gz";
 
+  std::cout << fname << '\n';
+
   skipgram s( fname, window_sz );
   s.readGzip( );
 
+  // check size, if > 5, acquire lock to block threads, reduce dictionaries
+
+  std::cout << "pushing back\n";
   mq.push( std::move(s.getCounter( ) ) );
 }
 
@@ -92,7 +97,7 @@ int main( int argc, char** argv ) {
   my_queue< dict > mq;
   
   // start a bunch of threads to skipgram a bunch of files
-  for( int i = 1; i!=5; ++i ) {
+  for( int i = 1; i!=2; ++i ) {
     v.push_back( std::thread( skipgram_func, i, std::ref(mq), window_sz ));
   }
   

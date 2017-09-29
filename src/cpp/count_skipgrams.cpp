@@ -1,25 +1,22 @@
 
 # include <fstream>
 # include <iostream>
-# include <algorithm>
-# include <iterator>
 # include <utility>
-
-# include <cstring>
-# include <memory>
-# include <cassert>
-
 # include <string>
 # include <vector>
 
-# include <boost/tokenizer.hpp>
-# include <boost/iostreams/stream.hpp>
-# include <boost/iostreams/device/file.hpp>
-# include <boost/iostreams/copy.hpp>
+# include <boost/algorithm/string.hpp>    
 # include <boost/iostreams/filter/gzip.hpp>
-# include <boost/iostreams/filter/zlib.hpp>
 # include <boost/iostreams/filtering_stream.hpp>
-# include <boost/iostreams/filtering_streambuf.hpp>
+
+// # include <boost/tokenizer.hpp>
+// # include <boost/iostreams/stream.hpp>
+// # include <boost/iostreams/device/file.hpp>
+// # include <boost/iostreams/copy.hpp>
+// # include <boost/iostreams/filter/gzip.hpp>
+// # include <boost/iostreams/filter/zlib.hpp>
+// # include <boost/iostreams/filtering_stream.hpp>
+// # include <boost/iostreams/filtering_streambuf.hpp>
 
 # include "count_skipgrams.h"
 
@@ -69,19 +66,15 @@ void skipgram::readGzip( ) {
     for(std::string str; std::getline(in, str); )
       {
 	assert( str.length( ) > 0 ); 
-	split2( str );
-	//std::cout << "Processed line: " << str << '\n';
+        boost::algorithm::to_lower(str);
+	line = "<s> " + line + " </s>";
+	processLine( str );
       }
   }
   catch(const boost::iostreams::gzip_error& e) {
     std::cout << e.what() << '\n';
   }
 }
-
-// need Boost to read a gzipped file either by bytes or newlines
-// void skipgram::readGzip( ) {
-// }
-
 
 void skipgram::readFile( ) {
   std::string line;
@@ -95,8 +88,8 @@ void skipgram::readFile( ) {
 	  //processLine( line );
 	  
 	  // begin and end tokens, lowercase
+	  boost::algorithm::to_lower(line);
 	  line = "<s> " + line + " </s>";
-	  std::transform( line.begin( ), line.end( ), line.end( ), ::tolower );  
 	  split2( line );
 	}
       myfile.close();
@@ -168,22 +161,6 @@ void skipgram::split2( const std::string &source ) {
 }
 
 
-// just use C's strtok
-// void skipgram::split3(const std::string& text){
-//   char* dst = new char[std::strlen(text.c_str()+1)];
-//   std::strcpy(dst, text.c_str( ));
-//   char * pch;
-//   printf("Splitting string \"%s\" into tokens:\n", dst);
-//   pch = strtok(dst," ,.-\t");
-//   while (pch != NULL)
-//     {
-//       printf ("%s\n",pch);
-//       pch = strtok(NULL, " ,.-\t");
-//     }
-//   delete dst;
-// }
-
-
 // loses window_size + 1 words; could store and concat to next line read if needed
 void skipgram::processLine( const std::string& line ) {
   // tokenize 
@@ -199,7 +176,7 @@ void skipgram::processLine( const std::string& line ) {
       boost::tokenizer<>::iterator j = i;  
       std::advance( j, window_size );
       tgram skip = std::make_pair( *i, *j );
-      
+
       // count skigprams  
       auto got = counter.find( skip );
       if ( got == counter.end() ) {
@@ -212,14 +189,9 @@ void skipgram::processLine( const std::string& line ) {
   }
 }
 
-void skipgram::writeOut( ) {
-  
-  // std::ofstream outfile;
-  // outfile.open(outfname, std::ios::out );
-  
+void skipgram::writeOut( ) {  
   for( auto i=counter.begin( ); i != counter.end( ); ++i ) {
     std::cout << i->first.first << ' ' << i->first.second << '\t' << i->second << '\n';
-    //outfile << i->first.first << ' ' << i->first.second << '\t' << i->second << '\n';
   }
 }
 

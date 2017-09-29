@@ -1,4 +1,0 @@
-ncalls	tottime	percall	cumtime	percall	filename:lineno(function)
-1	0.0	0.0	0.0	0.0	<method 'disable' of '_lsprof.Profiler' objects>
-2	3.4e-05	1.7e-05	3.4e-05	1.7e-05	<built-in method builtins.print>
-1	1e-06	1e-06	1.4e-05	1.4e-05	count_skipgrams

@@ -1,8 +1,9 @@
 
-from setuptools import setup
+from distutils.core import setup
 
 setup(
     name = "emi",
-    packages = ['src', 'test', 'dependencies', 'benchmarking', "profiling.research.async_examples"],
+    author="Chad Kringen",
+    packages = ['src', 'third-party', "profiling.research.async_examples"],
     include_package_data=True,
 )
